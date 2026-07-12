@@ -14,6 +14,6 @@ Run checks with `pnpm typecheck` and `pnpm test`. Android development uses `pnpm
 
 ## Production
 
-Set `EXPO_PUBLIC_API_URL=https://homeoremedica.com/api` in the EAS environment. Firebase client values are public identifiers, but signing files and service-account credentials must never be committed.
+Copy `.env.example` to `.env.local` for development. It targets the isolated `homeoremedica-dev` Firebase project; set `EXPO_PUBLIC_API_URL` to the development App Hosting URL after that backend is created. Production Firebase and API values belong only in the owner-controlled EAS production environment. Firebase client values are public identifiers, but signing files and service-account credentials must never be committed.
 
 This repository was extracted from the private HomeoRemedica monorepo with a clean history so private remedy data cannot be recovered from earlier commits.
