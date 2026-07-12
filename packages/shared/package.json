@@ -29,9 +29,9 @@
   "devDependencies": {
     "@vitest/coverage-v8": "^4.0.18",
     "firebase": "^12.9.0",
-    "react": "^19.0.0",
+    "react": "^19.2.7",
     "typescript": "~5.9.2",
-    "vite": "8.0.16",
+    "vite": "8.1.4",
     "vitest": "^4.0.18",
     "zod": "^4.3.6",
     "zustand": "^5.0.11"
