@@ -1,5 +1,8 @@
 {
   "name": "@homeoremedica/mobile",
+  "workspaces": [
+    "packages/*"
+  ],
   "main": "expo-router/entry",
   "version": "2.9.0",
   "scripts": {
@@ -20,15 +23,18 @@
       "^firebase/auth$": "<rootDir>/node_modules/firebase/auth/dist/index.cjs.js",
       "^@firebase/util$": "<rootDir>/node_modules/@firebase/util/dist/index.node.cjs.js"
     },
-    "testPathIgnorePatterns": ["<rootDir>/packages/shared/"]
+    "testPathIgnorePatterns": [
+      "<rootDir>/packages/shared/"
+    ]
   },
   "dependencies": {
     "@expo/vector-icons": "^15.0.3",
-    "@homeoremedica/shared": "workspace:*",
+    "@homeoremedica/shared": "*",
     "@react-native-async-storage/async-storage": "^2.2.0",
     "@react-native-google-signin/google-signin": "^16.1.1",
     "@react-navigation/native": "^7.1.8",
     "expo": "~54.0.30",
+    "expo-asset": "~12.0.13",
     "expo-constants": "~18.0.12",
     "expo-dev-client": "~6.0.20",
     "expo-font": "~14.0.9",
@@ -65,5 +71,9 @@
     "typescript": "~5.9.2"
   },
   "private": true,
-  "packageManager": "pnpm@9.15.0"
+  "allowScripts": {
+    "@firebase/util@1.15.1": true,
+    "protobufjs@7.6.5": true,
+    "fsevents@2.3.3": true
+  }
 }
