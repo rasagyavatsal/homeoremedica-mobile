@@ -1,0 +1,53 @@
+{
+  "expo": {
+    "name": "HomeoRemedica",
+    "slug": "homeoremedica",
+    "version": "2.9.0",
+    "platforms": [
+      "android",
+      "web"
+    ],
+    "icon": "./assets/images/logo.png",
+    "scheme": "homeoremedica",
+    "userInterfaceStyle": "light",
+    "splash": {
+      "image": "./assets/images/logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#f3f0e7"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./assets/images/logo.png",
+        "backgroundColor": "#ffffff"
+      },
+      "permissions": [
+        "VIBRATE"
+      ],
+      "predictiveBackGestureEnabled": false,
+      "package": "com.rasagyavatsal.homeoremedica",
+      "googleServicesFile": "./google-services.json",
+      "versionCode": 19
+    },
+    "web": {
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/images/logo.png"
+    },
+    "plugins": [
+      "expo-router",
+      "expo-sqlite",
+      "expo-asset",
+      "expo-web-browser",
+      "@react-native-google-signin/google-signin"
+    ],
+    "experiments": {
+      "typedRoutes": true
+    },
+    "extra": {
+      "router": {},
+      "eas": {
+        "projectId": "9dec9b83-7198-4bee-9c72-43f54e78bedc"
+      }
+    }
+  }
+}
