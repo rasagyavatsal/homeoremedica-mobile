@@ -6,11 +6,11 @@ Standalone Expo application. Remedy data is not bundled in the app; symptom and 
 
 ```sh
 cp .env.example .env
-pnpm install
-pnpm start
+npm install
+npm start
 ```
 
-Run checks with `pnpm typecheck` and `pnpm test`. Android development uses `pnpm android` with Java 17.
+Run checks with `npm run typecheck` and `npm test`. Android development uses `npm run android` with Java 17.
 
 ## Production
 
