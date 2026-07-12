@@ -1,0 +1,117 @@
+<svg width="1024" height="500" viewBox="0 0 1024 500" xmlns="http://www.w3.org/2000/svg" role="img" aria-labelledby="title desc">
+  <title id="title">HomeoRemedica Feature Graphic</title>
+  <desc id="desc">Feature graphic showing a clean card UI with symptoms and remedies for a homeopathic materia medica app.</desc>
+  <defs>
+    <linearGradient id="bgGradient" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#4A90A4"/>
+      <stop offset="50%" stop-color="#6AB0C4"/>
+      <stop offset="100%" stop-color="#3A7A94"/>
+    </linearGradient>
+    <linearGradient id="chipGradient" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#E8F4F8"/>
+      <stop offset="100%" stop-color="#FFFFFF"/>
+    </linearGradient>
+    <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+      <feDropShadow dx="0" dy="14" stdDeviation="18" flood-color="rgba(0,0,0,0.18)"/>
+    </filter>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1024" height="500" fill="url(#bgGradient)"/>
+
+  <!-- Decorative circles -->
+  <circle cx="130" cy="90" r="70" fill="rgba(248,250,251,0.15)"/>
+  <circle cx="900" cy="420" r="90" fill="rgba(248,250,251,0.14)"/>
+  <circle cx="860" cy="80" r="55" fill="rgba(232,184,109,0.22)"/>
+
+  <!-- Left headline area -->
+  <g transform="translate(90,120)" fill="#FFFFFF" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+    <text x="0" y="0" font-size="40" font-weight="700" letter-spacing="0.04em">
+      HOMEOREMEDICA
+    </text>
+    <text x="0" y="52" font-size="22" fill="#E0E8EB">
+      Search symptoms.
+    </text>
+    <text x="0" y="82" font-size="22" fill="#E0E8EB">
+      Match homeopathic remedies.
+    </text>
+
+    <!-- Bullet points -->
+    <g font-size="16" fill="#F8FAFB" transform="translate(0,118)">
+      <g transform="translate(0,0)">
+        <circle cx="6" cy="-6" r="4" fill="#E8B86D"/>
+        <text x="18" y="0">Boericke • Clarke • Kent materia medica</text>
+      </g>
+      <g transform="translate(0,30)">
+        <circle cx="6" cy="-6" r="4" fill="#E8B86D"/>
+        <text x="18" y="0">Select symptoms and see ranked remedies</text>
+      </g>
+      <g transform="translate(0,60)">
+        <circle cx="6" cy="-6" r="4" fill="#E8B86D"/>
+        <text x="18" y="0">Clean, focused interface for quick lookup</text>
+      </g>
+    </g>
+  </g>
+
+  <!-- Phone-like card on the right -->
+  <g transform="translate(520,60)">
+    <!-- Device frame -->
+    <rect x="0" y="0" rx="46" ry="46" width="400" height="380" fill="#FFFFFF" filter="url(#cardShadow)"/>
+    <rect x="20" y="18" rx="20" ry="20" width="360" height="344" fill="#F8FAFB"/>
+
+    <!-- Top bar with app title -->
+    <g transform="translate(40,52)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+      <circle cx="16" cy="-6" r="12" fill="#4A90A4"/>
+      <path d="M12 -9 L20 -9 L16 0 Z" fill="#F8FAFB"/>
+      <text x="36" y="0" font-size="18" font-weight="600" fill="#1A2B33">HomeoRemedica</text>
+      <text x="36" y="22" font-size="13" fill="#5A6B73">Find remedies by symptoms</text>
+    </g>
+
+    <!-- Book selector chips -->
+    <g transform="translate(40,110)">
+      <rect x="0" y="0" rx="18" ry="18" width="90" height="32" fill="#4A90A4"/>
+      <text x="18" y="21" font-size="13" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fill="#FFFFFF">Boericke</text>
+
+      <rect x="104" y="0" rx="18" ry="18" width="90" height="32" fill="url(#chipGradient)" stroke="#E0E8EB" stroke-width="1"/>
+      <text x="122" y="21" font-size="13" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fill="#4A90A4">Clarke</text>
+
+      <rect x="208" y="0" rx="18" ry="18" width="80" height="32" fill="url(#chipGradient)" stroke="#E0E8EB" stroke-width="1"/>
+      <text x="226" y="21" font-size="13" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fill="#4A90A4">Kent</text>
+    </g>
+
+    <!-- Selected symptom chips -->
+    <g transform="translate(40,164)">
+      <rect x="0" y="0" rx="16" ry="16" width="152" height="30" fill="#E8F4F8"/>
+      <text x="12" y="20" font-size="12" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fill="#4A90A4">Throbbing headache</text>
+
+      <rect x="164" y="0" rx="16" ry="16" width="158" height="30" fill="#E8F4F8"/>
+      <text x="176" y="20" font-size="12" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fill="#4A90A4">Worse evening</text>
+
+      <rect x="0" y="40" rx="16" ry="16" width="175" height="30" fill="#E8F4F8"/>
+      <text x="12" y="60" font-size="12" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif" fill="#4A90A4">Better by cold applications</text>
+    </g>
+
+    <!-- Remedy results list -->
+    <g transform="translate(40,240)" font-family="system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif">
+      <!-- Row 1 -->
+      <rect x="0" y="0" rx="14" ry="14" width="320" height="52" fill="#FFFFFF" stroke="#E0E8EB" stroke-width="1"/>
+      <circle cx="22" cy="26" r="12" fill="#4CAF50"/>
+      <text x="18" y="30" font-size="13" font-weight="600" fill="#FFFFFF">1</text>
+      <text x="50" y="24" font-size="14" font-weight="600" fill="#1A2B33">Belladonna</text>
+      <text x="50" y="42" font-size="11" fill="#5A6B73">3 matching symptoms • 100%</text>
+
+      <!-- Row 2 -->
+      <rect x="0" y="64" rx="14" ry="14" width="320" height="52" fill="#FFFFFF" opacity="0.9" stroke="#E0E8EB" stroke-width="1"/>
+      <circle cx="22" cy="90" r="12" fill="#7C9A92"/>
+      <text x="18" y="94" font-size="13" font-weight="600" fill="#FFFFFF">2</text>
+      <text x="50" y="88" font-size="14" font-weight="600" fill="#1A2B33">Nux vomica</text>
+      <text x="50" y="106" font-size="11" fill="#5A6B73">2 matching symptoms • 67%</text>
+    </g>
+  </g>
+
+  <!-- Small leaf accent bottom left -->
+  <g transform="translate(80,410)" fill="#FFFFFF" opacity="0.9">
+    <path d="M0 40 C20 5 60 -5 90 10 C55 25 35 45 0 40 Z" fill="#E8B86D" opacity="0.7"/>
+    <path d="M10 38 C28 18 55 12 78 18 C56 26 38 34 10 38 Z" fill="#F8FAFB" opacity="0.95"/>
+  </g>
+</svg>
