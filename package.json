@@ -4,7 +4,7 @@
     "packages/*"
   ],
   "main": "expo-router/entry",
-  "version": "2.9.0",
+  "version": "2.9.1",
   "scripts": {
     "start": "expo start",
     "android": "export JAVA_HOME=$(/usr/libexec/java_home -v 17) && expo run:android",
