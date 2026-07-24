@@ -4,6 +4,8 @@ import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
+import { BrandLockup } from '@/components/BrandLockup';
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { fonts, useTheme, withAlpha } from '@/constants/theme';
 import { withHaptic } from '@/lib/haptics';
 
@@ -44,26 +46,29 @@ export default function TabLayout() {
         headerTintColor: colors.foreground,
         headerTitleStyle: {
           fontFamily: fonts.display,
-          fontSize: 22,
+          fontSize: 20,
+          fontWeight: '500',
           color: colors.foreground,
         },
+        headerRight: () => <ThemeToggle />,
+        headerRightContainerStyle: { paddingRight: 16 },
         headerShadowVisible: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.onSurfaceVariant,
         tabBarStyle: {
-          backgroundColor: colors.background,
-          borderTopColor: withAlpha(colors.foreground, 0.55),
-          borderTopWidth: 2,
-          height: 68 + insets.bottom,
+          backgroundColor: colors.card,
+          borderTopColor: withAlpha(colors.border, 0.42),
+          borderTopWidth: 1,
+          height: 64 + insets.bottom,
           paddingBottom: insets.bottom + 8,
-          paddingTop: 10,
-          elevation: 0,
+          paddingTop: 8,
+          elevation: 8,
         },
         tabBarLabelStyle: {
-          fontFamily: fonts.mono,
-          fontSize: 10,
-          letterSpacing: 0.5,
-          marginTop: 3,
+          fontFamily: fonts.body,
+          fontSize: 11,
+          fontWeight: '500',
+          marginTop: 2,
         },
         tabBarButton: HapticTabButton,
       }}
@@ -71,7 +76,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          title: 'HomeoRemedica',
+          headerTitle: () => <BrandLockup />,
           tabBarLabel: 'Find Remedy',
           tabBarIcon: SearchTabIcon,
           tabBarButtonTestID: 'tab-finder',
@@ -80,7 +85,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="cases"
         options={{
-          title: 'My Cases',
+          title: 'Saved cases',
           tabBarLabel: 'Cases',
           tabBarIcon: CasesTabIcon,
           tabBarButtonTestID: 'tab-cases',
@@ -89,7 +94,7 @@ export default function TabLayout() {
       <Tabs.Screen
         name="profile"
         options={{
-          title: 'My Profile',
+          title: 'Account',
           tabBarLabel: 'Profile',
           tabBarIcon: ProfileTabIcon,
           tabBarButtonTestID: 'tab-profile',

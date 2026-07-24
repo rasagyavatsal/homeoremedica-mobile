@@ -18,5 +18,6 @@ class MobileApiClient extends ApiClient {
 }
 
 export const apiClient = new MobileApiClient(
-  process.env.EXPO_PUBLIC_API_URL || 'https://homeoremedica.com/api'
+  process.env.EXPO_PUBLIC_API_URL ||
+    'https://homeoremedica-web--homeoremedica.us-central1.hosted.app/api'
 );

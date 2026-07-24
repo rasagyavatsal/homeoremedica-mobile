@@ -1,4 +1,5 @@
 import { expandSearchTerms } from '../synonyms';
+import { BOOK_IDS } from '../validation/schemas';
 
 export interface RepertoryQueryExecutor {
   all<T>(sql: string, params?: (string | number)[]): Promise<T[]>;
@@ -187,8 +188,11 @@ export function createRepertorySearchService(executor: RepertoryQueryExecutor): 
     },
 
     async getRemedyDetails(remedyId) {
-      const parts = remedyId.split('-');
-      const book = parts.pop()!;
+      const book = BOOK_IDS.find((bookId) => remedyId.endsWith(`-${bookId}`));
+      if (!book) return null;
+
+      const slug = remedyId.slice(0, -(book.length + 1));
+      if (!slug) return null;
       
       const query = `
         SELECT id, name, book
@@ -196,7 +200,7 @@ export function createRepertorySearchService(executor: RepertoryQueryExecutor): 
         WHERE book = ? AND slug = ?
       `;
 
-      const row = await executor.get<{ id: number; name: string; book: string }>(query, [book, parts.join('-')]);
+      const row = await executor.get<{ id: number; name: string; book: string }>(query, [book, slug]);
       if (!row) return null;
 
       const allSymptomsQuery = `

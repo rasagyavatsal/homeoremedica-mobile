@@ -4,9 +4,11 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Button } from '@/components/ui/Button';
+import { Callout } from '@/components/ui/Callout';
 import { Surface } from '@/components/ui/Surface';
-import { Body, Display, Mono } from '@/components/ui/Type';
+import { Body, Display, Eyebrow, Mono } from '@/components/ui/Type';
 import { radius, space, useTheme, withAlpha } from '@/constants/theme';
+import { getSourceBookName } from '@/constants/books';
 import { useCasesStore } from '@/lib/stores/cases-store';
 import { useAuthStore } from '@/lib/stores/auth-store';
 import { useAppContext } from '@/context/AppContext';
@@ -26,7 +28,7 @@ export default function CasesScreen() {
     } else {
       router.push('/auth/login');
     }
-  }, [user]);
+  }, [loadUserCases, router, user]);
 
   const handleLoadCase = (caseItem: Case) => {
     Alert.alert(
@@ -54,47 +56,53 @@ export default function CasesScreen() {
   };
 
   const renderCaseItem = ({ item }: { item: Case }) => (
-    <Surface style={{ flexDirection: 'row', overflow: 'hidden', marginBottom: space.md }}>
+    <Surface
+      elevated={false}
+      radius="lg"
+      tone="bright"
+      style={{ position: 'relative', overflow: 'hidden', marginBottom: space.md }}
+    >
       <Pressable
-        style={{ flex: 1, padding: space.lg }}
+        style={({ pressed }) => ({
+          padding: space.lg,
+          paddingRight: 56,
+          backgroundColor: pressed ? colors.accent : 'transparent',
+        })}
         onPress={withHaptic(() => handleLoadCase(item))}
         accessible
         accessibilityRole="button"
         accessibilityLabel={`${item.name}, ${item.selectedSymptoms.length} symptoms`}
       >
-        <Display size="sm">{item.name}</Display>
-        <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8, marginTop: 8 }}>
-          <Mono small>{new Date(item.timestamp).toLocaleDateString()}</Mono>
-          <Mono small tone="onSurfaceVariant">·</Mono>
-          <Mono small>{item.selectedSymptoms.length} symptoms</Mono>
+        <Body style={{ fontWeight: '500' }}>{item.name}</Body>
+        <View
+          style={{
+            flexDirection: 'row',
+            flexWrap: 'wrap',
+            alignItems: 'center',
+            gap: 8,
+            marginTop: 8,
+          }}
+        >
+          <Eyebrow>{new Date(item.timestamp).toLocaleDateString()}</Eyebrow>
+          <Eyebrow>·</Eyebrow>
+          <Eyebrow>
+            {item.bookId ? getSourceBookName(item.bookId) : 'All sources'}
+          </Eyebrow>
+          <Eyebrow>·</Eyebrow>
+          <Eyebrow>{item.selectedSymptoms.length} symptoms</Eyebrow>
         </View>
-        {item.bookId ? (
-          <View
-            style={{
-              alignSelf: 'flex-start',
-              marginTop: 10,
-              paddingHorizontal: 8,
-              paddingVertical: 3,
-              borderRadius: radius.sm,
-              borderWidth: 1,
-              borderColor: withAlpha(colors.primary, 0.35),
-              backgroundColor: withAlpha(colors.primary, 0.1),
-            }}
-          >
-            <Mono small tone="primary">
-              {item.bookId.charAt(0).toUpperCase() + item.bookId.slice(1)}
-            </Mono>
-          </View>
-        ) : null}
       </Pressable>
 
       <TouchableOpacity
         style={{
-          justifyContent: 'center',
+          position: 'absolute',
+          right: 8,
+          top: 8,
+          width: 40,
+          height: 40,
           alignItems: 'center',
-          paddingHorizontal: space.lg,
-          borderLeftWidth: 1,
-          borderLeftColor: withAlpha(colors.border, 0.3),
+          justifyContent: 'center',
+          borderRadius: radius.md,
         }}
         onPress={withHaptic(() => handleDelete(item.id))}
         accessibilityRole="button"
@@ -112,7 +120,7 @@ export default function CasesScreen() {
   if (error) {
     content = (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40 }}>
-        <Ionicons name="cloud-offline-outline" size={56} color={colors.destructive} />
+        <Ionicons name="cloud-offline-outline" size={44} color={colors.destructive} />
         <Display size="sm" style={{ marginTop: space.lg, textAlign: 'center' }}>
           Something went wrong
         </Display>
@@ -132,13 +140,13 @@ export default function CasesScreen() {
   } else if (cases.length === 0) {
     content = (
       <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', padding: 40 }}>
-        <Ionicons name="file-tray-outline" size={56} color={withAlpha(colors.foreground, 0.25)} />
+        <Ionicons name="file-tray-outline" size={44} color={colors.onSurfaceVariant} />
         <Display size="sm" style={{ marginTop: space.lg }}>
           No saved cases
         </Display>
-        <Body size="sm" tone="onSurfaceVariant" style={{ marginTop: space.sm, marginBottom: space.xl, textAlign: 'center' }}>
-          Save a search to keep it here.
-        </Body>
+        <View style={{ width: '100%', marginTop: space.lg, marginBottom: space.xl }}>
+          <Callout>No saved cases yet. Create one after running a search.</Callout>
+        </View>
         <Button
           title="Start searching"
           onPress={() => router.replace('/')}
@@ -152,7 +160,7 @@ export default function CasesScreen() {
         data={cases}
         renderItem={renderCaseItem}
         keyExtractor={(item) => item.id}
-        contentContainerStyle={{ padding: space.page }}
+        contentContainerStyle={{ padding: space.page, paddingTop: space.xl }}
         showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl

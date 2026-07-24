@@ -13,6 +13,8 @@ export type {
 
 // Validation schemas
 export {
+  BOOK_IDS,
+  bookIdSchema,
   findRemedySchema,
   selectedSymptomSchema,
   caseResultSchema,
@@ -58,4 +60,3 @@ export type { FirebaseAuthCoreConfig } from './lib/auth/core';
 // Repertory Search Service
 export { createRepertorySearchService } from './lib/repertory/search-service';
 export type { RepertorySearchService, RepertoryQueryExecutor, RemedyMatch, RemedyDetails } from './lib/repertory/search-service';
-

@@ -5,10 +5,13 @@ import { render } from '@testing-library/react-native';
 import ProfileScreen from '../profile';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
+const mockPush = jest.fn();
+const mockReplace = jest.fn();
+
 jest.mock('expo-router', () => ({
   useRouter: () => ({
-    push: jest.fn(),
-    replace: jest.fn(),
+    push: mockPush,
+    replace: mockReplace,
   }),
 }));
 
@@ -53,9 +56,18 @@ describe('ProfileScreen', () => {
     expect(initialStyle).toEqual(
       expect.objectContaining({
         textAlign: 'center',
-        fontSize: 30,
-        lineHeight: 72,
+        fontSize: 24,
+        lineHeight: 64,
       })
     );
+  });
+
+  it('opens sign in for an unauthenticated tab', () => {
+    mockUseAuthStore.mockReturnValue({ user: null, logout: jest.fn() });
+
+    render(<ProfileScreen />);
+
+    expect(mockPush).toHaveBeenCalledWith('/auth/login');
+    expect(mockReplace).not.toHaveBeenCalled();
   });
 });

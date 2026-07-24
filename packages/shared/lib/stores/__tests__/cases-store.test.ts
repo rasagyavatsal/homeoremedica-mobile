@@ -27,7 +27,7 @@ describe('cases-store utilities', () => {
       const apiData = {
         id: '1',
         name: 'Case 1',
-        bookId: 'boericke',
+        bookId: 'boericke-MM',
         selectedSymptoms: [{ id: 's1', name: 'Symptom 1' }],
         userId: 'u1',
         createdAt: now
@@ -37,7 +37,7 @@ describe('cases-store utilities', () => {
       expect(result).toEqual({
         id: '1',
         name: 'Case 1',
-        bookId: 'boericke',
+        bookId: 'boericke-MM',
         selectedSymptoms: [{ id: 's1', name: 'Symptom 1' }],
         userId: 'u1',
         timestamp: new Date(now)

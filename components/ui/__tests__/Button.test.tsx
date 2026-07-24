@@ -43,14 +43,13 @@ describe('Button', () => {
     expect(queryByText('Click Me')).toBeNull();
   });
 
-  it('stays flat when pressed', () => {
+  it('uses the web control height and rounded geometry', () => {
     const { getByTestId } = render(
-      <Button onPress={() => {}} title="Click Me" testID="flat-button" />
+      <Button onPress={() => {}} title="Click Me" testID="quiet-button" />
     );
 
-    fireEvent(getByTestId('flat-button'), 'pressIn');
-    const pressedStyle = StyleSheet.flatten(getByTestId('flat-button').props.style);
-    expect(pressedStyle.transform).toBeUndefined();
+    const style = StyleSheet.flatten(getByTestId('quiet-button').props.style);
+    expect(style).toEqual(expect.objectContaining({ minHeight: 44, borderRadius: 14 }));
   });
 
   it('renders without an offset shadow layer', () => {

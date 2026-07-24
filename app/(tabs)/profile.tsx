@@ -4,22 +4,23 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import Constants from 'expo-constants';
 
+import { ThemeToggle } from '@/components/ThemeToggle';
 import { Surface } from '@/components/ui/Surface';
-import { Body, Display, Mono } from '@/components/ui/Type';
+import { Body, Display, Eyebrow, Mono } from '@/components/ui/Type';
 import { fonts, radius, space, useTheme, withAlpha } from '@/constants/theme';
 import { useAuthStore } from '@/lib/stores/auth-store';
 import { isGoogleUser } from '@/lib/auth/firebase-auth';
 import { withHaptic } from '@/lib/haptics';
 
 export default function ProfileScreen() {
-  const { colors } = useTheme();
+  const { colors, resolvedTheme } = useTheme();
   const { user, logout } = useAuthStore();
   const router = useRouter();
   const isGoogle = isGoogleUser();
 
   useEffect(() => {
     if (!user) router.push('/auth/login');
-  }, [user]);
+  }, [router, user]);
 
   if (!user) return null;
 
@@ -43,15 +44,13 @@ export default function ProfileScreen() {
       style={{ flex: 1, backgroundColor: colors.background }}
       contentContainerStyle={{ padding: space.page }}
     >
-      <Surface style={{ alignItems: 'center', paddingVertical: 32, marginBottom: space.xxl }}>
+      <Surface style={{ alignItems: 'center', padding: space.xxl, marginBottom: space.xxl }}>
         <View
           style={{
-            width: 72,
-            height: 72,
-            borderRadius: radius.md,
-            borderWidth: 1,
-            borderColor: withAlpha(colors.primary, 0.35),
-            backgroundColor: withAlpha(colors.primary, 0.1),
+            width: 64,
+            height: 64,
+            borderRadius: radius.pill,
+            backgroundColor: colors.accent,
             alignItems: 'center',
             justifyContent: 'center',
             marginBottom: space.lg,
@@ -59,25 +58,64 @@ export default function ProfileScreen() {
         >
           <Body
             style={{
-              width: 72,
-              fontFamily: fonts.displaySemibold,
-              fontSize: 30,
-              lineHeight: 72,
+              width: 64,
+              fontFamily: fonts.display,
+              fontSize: 24,
+              lineHeight: 64,
+              fontWeight: '500',
               textAlign: 'center',
               includeFontPadding: false,
-              color: colors.primary,
+              color: colors.accentForeground,
             }}
           >
             {initial}
           </Body>
         </View>
-        <Display size="md">{user.name || 'User'}</Display>
-        <Mono small style={{ marginTop: 4 }}>
+        <Display size="sm">{user.name || 'Account'}</Display>
+        <Body size="sm" tone="onSurfaceVariant" style={{ marginTop: 4 }}>
           {user.email}
-        </Mono>
+        </Body>
       </Surface>
 
+      <Eyebrow style={{ marginBottom: space.sm, marginLeft: space.xs }}>
+        Preferences
+      </Eyebrow>
       <Surface style={{ overflow: 'hidden', marginBottom: space.xxl }}>
+        <View
+          style={{
+            flexDirection: 'row',
+            alignItems: 'center',
+            gap: space.md,
+            padding: space.lg,
+            borderBottomWidth: 1,
+            borderBottomColor: withAlpha(colors.border, 0.32),
+          }}
+        >
+          <View
+            style={{
+              width: 40,
+              height: 40,
+              alignItems: 'center',
+              justifyContent: 'center',
+              borderRadius: radius.pill,
+              backgroundColor: colors.accent,
+            }}
+          >
+            <Ionicons
+              name={resolvedTheme === 'dark' ? 'moon-outline' : 'sunny-outline'}
+              size={18}
+              color={colors.accentForeground}
+            />
+          </View>
+          <View style={{ flex: 1 }}>
+            <Body style={{ fontWeight: '500' }}>Appearance</Body>
+            <Body size="sm" tone="onSurfaceVariant">
+              {resolvedTheme === 'dark' ? 'Dark mode' : 'Light mode'}
+            </Body>
+          </View>
+          <ThemeToggle />
+        </View>
+
         {!isGoogle ? (
           <Pressable
             onPress={withHaptic(() => router.push('/auth/change-password'))}
@@ -90,12 +128,12 @@ export default function ProfileScreen() {
               gap: space.md,
               padding: space.lg,
               borderBottomWidth: 1,
-              borderBottomColor: withAlpha(colors.border, 0.25),
-              backgroundColor: pressed ? withAlpha(colors.foreground, 0.04) : 'transparent',
+              borderBottomColor: withAlpha(colors.border, 0.32),
+              backgroundColor: pressed ? colors.accent : 'transparent',
             })}
           >
             <Ionicons name="key-outline" size={20} color={colors.onSurfaceVariant} />
-            <Body size="lg" style={{ flex: 1, fontWeight: '600' }}>
+            <Body style={{ flex: 1, fontWeight: '500' }}>
               Change password
             </Body>
             <Ionicons name="chevron-forward" size={18} color={colors.onSurfaceVariant} />
@@ -112,11 +150,11 @@ export default function ProfileScreen() {
             alignItems: 'center',
             gap: space.md,
             padding: space.lg,
-            backgroundColor: pressed ? withAlpha(colors.destructive, 0.06) : 'transparent',
+            backgroundColor: pressed ? colors.secondary : 'transparent',
           })}
         >
           <Ionicons name="log-out-outline" size={20} color={colors.destructive} />
-          <Body size="lg" tone="destructive" style={{ flex: 1, fontWeight: '600' }}>
+          <Body tone="destructive" style={{ flex: 1, fontWeight: '500' }}>
             Log out
           </Body>
         </Pressable>

@@ -9,16 +9,16 @@
     ],
     "icon": "./assets/images/logo.png",
     "scheme": "homeoremedica",
-    "userInterfaceStyle": "light",
+    "userInterfaceStyle": "automatic",
     "splash": {
       "image": "./assets/images/logo.png",
       "resizeMode": "contain",
-      "backgroundColor": "#f3f0e7"
+      "backgroundColor": "#faf9f6"
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/logo.png",
-        "backgroundColor": "#ffffff"
+        "backgroundColor": "#faf9f6"
       },
       "permissions": [
         "VIBRATE"

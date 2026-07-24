@@ -1,11 +1,11 @@
 import React from 'react';
 import { ActivityIndicator, Pressable, Text, TextStyle, View, ViewStyle } from 'react-native';
 
-import { radius, useTheme, withAlpha } from '@/constants/theme';
+import { fonts, radius, useTheme, withAlpha } from '@/constants/theme';
 import { splitSurfaceStyle } from '@/components/ui/Surface';
 import { withHaptic } from '@/lib/haptics';
 
-type Variant = 'primary' | 'outline' | 'ghost' | 'tertiary' | 'destructive';
+type Variant = 'primary' | 'secondary' | 'outline' | 'ghost' | 'tertiary' | 'destructive';
 
 interface ButtonProps {
   onPress: () => void;
@@ -45,15 +45,20 @@ export const Button = ({
       border: colors.destructive,
       fg: colors.destructiveForeground,
     },
+    secondary: {
+      bg: colors.secondary,
+      border: withAlpha(colors.border, 0.32),
+      fg: colors.secondaryForeground,
+    },
     outline: {
-      bg: colors.surfaceBright,
-      border: withAlpha(colors.foreground, 0.3),
+      bg: 'transparent',
+      border: withAlpha(colors.border, 0.42),
       fg: colors.foreground,
     },
     tertiary: {
-      bg: withAlpha(colors.tertiary, 0.08),
-      border: withAlpha(colors.tertiary, 0.35),
-      fg: colors.tertiary,
+      bg: colors.accent,
+      border: withAlpha(colors.border, 0.32),
+      fg: colors.accentForeground,
     },
     ghost: { bg: 'transparent', border: 'transparent', fg: colors.onSurfaceVariant },
   };
@@ -63,7 +68,7 @@ export const Button = ({
   const radiusValue = radius.md;
 
   const contentBase: ViewStyle = {
-    minHeight: 48,
+    minHeight: 44,
     borderRadius: radiusValue,
     borderWidth: 1,
     borderColor: v.border,
@@ -72,8 +77,8 @@ export const Button = ({
     alignItems: 'center',
     justifyContent: 'center',
     gap: 8,
-    paddingHorizontal: 18,
-    paddingVertical: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
   };
 
   return (
@@ -88,7 +93,14 @@ export const Button = ({
         style={({ pressed }) => [
           contentBase,
           inner,
-          pressed && !isDisabled ? { opacity: 0.86 } : null,
+          pressed && !isDisabled
+            ? {
+                opacity: 0.9,
+                transform: [{ scale: 0.985 }],
+                backgroundColor:
+                  variant === 'outline' || variant === 'ghost' ? colors.accent : v.bg,
+              }
+            : null,
         ]}
       >
         {loading ? (
@@ -96,7 +108,18 @@ export const Button = ({
         ) : (
           <>
             {icon ? <View>{icon}</View> : null}
-            <Text style={[{ fontSize: 15, letterSpacing: 0.2, fontWeight: '600', color: v.fg }, textStyle]}>
+            <Text
+              style={[
+                {
+                  fontFamily: fonts.body,
+                  fontSize: 14,
+                  lineHeight: 20,
+                  fontWeight: '500',
+                  color: v.fg,
+                },
+                textStyle,
+              ]}
+            >
               {title}
             </Text>
           </>

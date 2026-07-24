@@ -4,10 +4,11 @@ import { useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 
 import { Button } from '@/components/ui/Button';
+import { Callout } from '@/components/ui/Callout';
 import { Input } from '@/components/ui/Input';
-import { Body, Display, Mono } from '@/components/ui/Type';
+import { Body } from '@/components/ui/Type';
 import { AuthShell, AuthError } from '@/components/auth';
-import { radius, space, useTheme, withAlpha } from '@/constants/theme';
+import { space, useTheme } from '@/constants/theme';
 import { sendPasswordReset } from '@/lib/auth/firebase-auth';
 import { withHaptic } from '@/lib/haptics';
 
@@ -42,38 +43,32 @@ export default function ResetPasswordScreen() {
 
   if (isSent) {
     return (
-      <View
-        style={{
-          flex: 1,
-          backgroundColor: colors.background,
-          justifyContent: 'center',
-          alignItems: 'center',
-          padding: space.xxl,
-        }}
+      <AuthShell
+        title="Check your email"
+        subtitle={`Reset link sent to ${email}.`}
+        showBrand={false}
       >
-        <View
-          style={{
-            width: 88,
-            height: 88,
-            borderRadius: radius.md,
-            borderWidth: 1,
-            borderColor: withAlpha(colors.primary, 0.35),
-            backgroundColor: withAlpha(colors.primary, 0.1),
-            justifyContent: 'center',
-            alignItems: 'center',
-            marginBottom: space.xxl,
-          }}
-        >
-          <Ionicons name="mail-unread-outline" size={40} color={colors.primary} />
+        <View style={{ marginBottom: space.xxl }}>
+          <Callout>
+            Click the link in the email to reset your password. If you do not see it, check
+            your spam folder.
+          </Callout>
         </View>
-        <Display size="md" style={{ textAlign: 'center' }}>
-          Check your email
-        </Display>
-        <Body tone="onSurfaceVariant" style={{ textAlign: 'center', marginTop: space.md, marginBottom: space.xxl }}>
-          We've sent password reset instructions to {email}.
-        </Body>
-        <Button title="Back to sign in" onPress={() => router.replace('/auth/login')} style={{ width: '100%' }} />
-      </View>
+        <Button
+          title="Back to login"
+          onPress={() => router.replace('/auth/login')}
+          icon={<Ionicons name="arrow-back" size={18} color={colors.primaryForeground} />}
+        />
+        <Button
+          title="Send another email"
+          variant="outline"
+          onPress={() => {
+            setIsSent(false);
+            setEmail('');
+          }}
+          style={{ marginTop: space.md }}
+        />
+      </AuthShell>
     );
   }
 
@@ -89,10 +84,10 @@ export default function ResetPasswordScreen() {
   );
 
   return (
-    <AuthShell title="Reset password" navHeader={navHeader}>
+    <AuthShell title="Reset your password" navHeader={navHeader} showBrand={false}>
       <Input
         label="Email"
-        placeholder="your@email.com"
+        placeholder="Enter your email"
         value={email}
         onChangeText={setEmail}
         autoCapitalize="none"
@@ -102,15 +97,15 @@ export default function ResetPasswordScreen() {
 
       <AuthError message={error} />
 
-      <Button title="Send instructions" onPress={handleReset} loading={isLoading} style={{ marginTop: 8 }} />
+      <Button title="Send reset link" onPress={handleReset} loading={isLoading} style={{ marginTop: 8 }} />
 
       <TouchableOpacity
         style={{ alignItems: 'center', marginTop: space.xxl }}
         onPress={withHaptic(() => router.replace('/auth/login'))}
       >
-        <Mono small tone="tertiary">
-          Back to sign in
-        </Mono>
+        <Body size="sm" tone="onSurfaceVariant" style={{ fontWeight: '500' }}>
+          ← Back to login
+        </Body>
       </TouchableOpacity>
     </AuthShell>
   );

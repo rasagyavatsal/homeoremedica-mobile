@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { StyleProp, StyleSheet, View, ViewProps, ViewStyle } from 'react-native';
 
-import { radius as radii, useTheme, withAlpha } from '@/constants/theme';
+import { radius as radii, softShadow, useTheme, withAlpha } from '@/constants/theme';
 
 type Tone = 'card' | 'surface' | 'bright' | 'lowest' | 'low' | 'high';
 
@@ -21,6 +21,9 @@ const OUTER_KEYS = new Set<string>([
   'flexGrow',
   'flexShrink',
   'flexBasis',
+  'width',
+  'minWidth',
+  'maxWidth',
   'position',
   'top',
   'left',
@@ -44,22 +47,22 @@ export function splitSurfaceStyle(style?: StyleProp<ViewStyle>): [ViewStyle, Vie
 }
 
 export interface SurfaceProps extends ViewProps {
-  /** Draw the hairline ink border that frames every ledger surface. */
   bordered?: boolean;
+  elevated?: boolean;
   radius?: keyof typeof radii;
   tone?: Tone;
 }
 
-/* A ledger surface: warm card stock framed by a hairline ink rule. */
 export function Surface({
   bordered = true,
-  radius = 'md',
+  elevated = true,
+  radius = 'xl',
   tone = 'card',
   style,
   children,
   ...props
 }: SurfaceProps) {
-  const { colors } = useTheme();
+  const { colors, isDark } = useTheme();
   const radiusValue = radii[radius];
 
   const background = {
@@ -79,11 +82,17 @@ export function Surface({
   };
   if (bordered) {
     content.borderWidth = 1;
-    content.borderColor = withAlpha(colors.border, 0.45);
+    content.borderColor = withAlpha(colors.border, isDark ? 0.42 : 0.32);
   }
 
   return (
-    <View style={outer}>
+    <View
+      style={[
+        outer,
+        elevated ? softShadow : null,
+        elevated ? { borderRadius: radiusValue } : null,
+      ]}
+    >
       <View style={[content, inner]} {...props}>
         {children}
       </View>

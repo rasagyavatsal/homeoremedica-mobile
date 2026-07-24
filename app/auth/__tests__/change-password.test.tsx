@@ -148,18 +148,18 @@ describe('ChangePasswordScreen', () => {
     const { getByPlaceholderText, queryByText, getByText } = render(<ChangePasswordScreen />);
     
     // initially hidden
-    expect(queryByText('12+ characters')).toBeNull();
+    expect(queryByText('At least 12 characters')).toBeNull();
     
     const passwordInput = getByPlaceholderText('Create password');
     const { fireEvent } = require('@testing-library/react-native');
     
     // type password, checklist appears
     fireEvent.changeText(passwordInput, 'a');
-    expect(getByText('12+ characters')).toBeTruthy();
-    expect(getByText('Uppercase letter')).toBeTruthy();
+    expect(getByText('At least 12 characters')).toBeTruthy();
+    expect(getByText('One uppercase letter (A-Z)')).toBeTruthy();
     
     // clear password, checklist hides
     fireEvent.changeText(passwordInput, '');
-    expect(queryByText('12+ characters')).toBeNull();
+    expect(queryByText('At least 12 characters')).toBeNull();
   });
 });
