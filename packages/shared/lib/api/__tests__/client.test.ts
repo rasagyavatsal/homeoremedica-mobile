@@ -62,7 +62,7 @@ describe('ApiClient', () => {
 
     it('validates input with Zod and rejects empty symptoms', async () => {
       await expect(
-        client.findRemedies({ bookId: 'boericke', symptoms: [] })
+        client.findRemedies({ bookId: 'boericke-MM', symptoms: [] })
       ).rejects.toThrow();
       expect(fetchSpy).not.toHaveBeenCalled();
     });
@@ -72,7 +72,7 @@ describe('ApiClient', () => {
       mockFetchResponse(mockResponse);
 
       const result = await client.findRemedies({
-        bookId: 'boericke',
+        bookId: 'boericke-MM',
         symptoms: ['headache'],
       });
 
@@ -81,7 +81,7 @@ describe('ApiClient', () => {
       expect(url).toBe('http://localhost:3000/api/find');
       expect(options.method).toBe('POST');
       expect(JSON.parse(options.body)).toEqual({
-        bookId: 'boericke',
+        bookId: 'boericke-MM',
         symptoms: ['headache'],
       });
       expect(result).toEqual(mockResponse);

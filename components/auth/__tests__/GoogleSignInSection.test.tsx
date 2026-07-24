@@ -11,8 +11,8 @@ describe('GoogleSignInSection', () => {
     const { getByText } = render(
       <GoogleSignInSection onPress={() => {}} loading={false} />
     );
-    expect(getByText('OR')).toBeTruthy();
-    expect(getByText('Continue with Google')).toBeTruthy();
+    expect(getByText('Or')).toBeTruthy();
+    expect(getByText('Sign in with Google')).toBeTruthy();
   });
 
   it('calls onPress when Google button is clicked', () => {
@@ -21,7 +21,7 @@ describe('GoogleSignInSection', () => {
       <GoogleSignInSection onPress={onPress} loading={false} />
     );
     
-    fireEvent.press(getByText('Continue with Google'));
+    fireEvent.press(getByText('Sign in with Google'));
     expect(onPress).toHaveBeenCalled();
   });
 });

@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
 import { StyleProp, Text, TextInput, TextInputProps, View, ViewStyle } from 'react-native';
 
-import { fonts, radius, type as t, useTheme, withAlpha } from '@/constants/theme';
+import { fonts, radius, useTheme, withAlpha } from '@/constants/theme';
 
 interface InputProps extends TextInputProps {
   label?: string;
   error?: string;
   containerStyle?: StyleProp<ViewStyle>;
   icon?: React.ReactNode;
+  rightLabel?: React.ReactNode;
   rightElement?: React.ReactNode;
 }
 
@@ -16,6 +17,7 @@ export const Input = ({
   error,
   containerStyle,
   icon,
+  rightLabel,
   rightElement,
   onFocus,
   onBlur,
@@ -29,17 +31,35 @@ export const Input = ({
   const borderColor = error
     ? colors.destructive
     : focused
-      ? colors.foreground
-      : withAlpha(colors.border, 0.55);
+      ? colors.primary
+      : withAlpha(colors.border, 0.42);
 
   return (
-    <View style={[{ marginBottom: 16, width: '100%' }, containerStyle]}>
+    <View style={[{ marginBottom: 20, width: '100%' }, containerStyle]}>
       {label ? (
-        <Text
-          style={[t.eyebrow, { color: colors.onSurfaceVariant, marginBottom: 8 }]}
+        <View
+          style={{
+            minHeight: 20,
+            flexDirection: 'row',
+            alignItems: 'center',
+            justifyContent: 'space-between',
+            gap: 12,
+            marginBottom: 8,
+          }}
         >
-          {label}
-        </Text>
+          <Text
+            style={{
+              color: colors.foreground,
+              fontFamily: fonts.body,
+              fontSize: 14,
+              lineHeight: 20,
+              fontWeight: '500',
+            }}
+          >
+            {label}
+          </Text>
+          {rightLabel}
+        </View>
       ) : null}
 
       <View style={{ position: 'relative', flexDirection: 'row', alignItems: 'center' }}>
@@ -51,12 +71,13 @@ export const Input = ({
           style={[
             {
               flex: 1,
-              minHeight: 48,
+              minHeight: 44,
               borderWidth: 1,
               borderColor,
               borderRadius: radius.md,
               paddingHorizontal: 14,
               paddingVertical: 12,
+              fontFamily: fonts.body,
               fontSize: 16,
               color: colors.foreground,
               backgroundColor: colors.surfaceBright,

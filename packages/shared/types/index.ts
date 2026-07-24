@@ -1,6 +1,6 @@
 import { FindRemedyRequest as ZodFindRemedyRequest, SelectedSymptom } from '../lib/validation/schemas';
 
-export type BookId = 'boericke' | 'clarke' | 'kent' | 'allen';
+export type BookId = ZodFindRemedyRequest['bookId'];
 
 export interface Remedy {
   id: string;

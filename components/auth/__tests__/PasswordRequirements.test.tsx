@@ -11,8 +11,8 @@ describe('PasswordRequirements', () => {
         displayName="John Doe" 
       />
     );
-    expect(getByText('12+ characters')).toBeTruthy();
-    expect(getByText('Uppercase letter')).toBeTruthy();
+    expect(getByText('At least 12 characters')).toBeTruthy();
+    expect(getByText('One uppercase letter (A-Z)')).toBeTruthy();
   });
 
   it('renders nothing when password is empty', () => {
@@ -23,6 +23,6 @@ describe('PasswordRequirements', () => {
         displayName="John Doe" 
       />
     );
-    expect(queryByText('12+ characters')).toBeNull();
+    expect(queryByText('At least 12 characters')).toBeNull();
   });
 });

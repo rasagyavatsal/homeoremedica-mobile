@@ -36,7 +36,7 @@ interface AppContextType {
 const AppContext = createContext<AppContextType | undefined>(undefined);
 
 export function AppProvider({ children }: Readonly<{ children: ReactNode }>) {
-  const [selectedBook, setSelectedBook] = useState<BookType>('boericke');
+  const [selectedBook, setSelectedBook] = useState<BookType>('boericke-MM');
   const [selectedSymptoms, setSelectedSymptoms] = useState<string[]>([]);
   const [isDbReady, setIsDbReady] = useState(false);
   const [dbError, setDbError] = useState<string | null>(null);
@@ -93,12 +93,7 @@ export function AppProvider({ children }: Readonly<{ children: ReactNode }>) {
       return [];
     }
 
-    try {
-      return await dbFindRemedies(selectedBook, selectedSymptoms);
-    } catch (error) {
-      console.error('Failed to find remedies locally:', error);
-      return [];
-    }
+    return dbFindRemedies(selectedBook, selectedSymptoms);
   }, [selectedBook, selectedSymptoms, isDbReady]);
 
   const value = useMemo(

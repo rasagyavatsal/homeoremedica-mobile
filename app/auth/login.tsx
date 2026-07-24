@@ -5,7 +5,7 @@ import { Ionicons } from '@expo/vector-icons';
 
 import { Button } from '@/components/ui/Button';
 import { Input } from '@/components/ui/Input';
-import { Body, Mono } from '@/components/ui/Type';
+import { Body } from '@/components/ui/Type';
 import { space, useTheme } from '@/constants/theme';
 import { withHaptic } from '@/lib/haptics';
 import { useAuthStore } from '@/lib/stores/auth-store';
@@ -46,7 +46,7 @@ export default function LoginScreen() {
   };
 
   return (
-    <AuthShell title="Welcome back">
+    <AuthShell title="Sign in">
       <Input
         label="Email"
         placeholder="your@email.com"
@@ -59,20 +59,20 @@ export default function LoginScreen() {
 
       <PasswordInput
         label="Password"
-        placeholder="Enter password"
+        placeholder="••••••••"
         value={password}
         onChangeText={setPassword}
+        rightLabel={
+          <TouchableOpacity
+            onPress={withHaptic(() => router.push('/auth/reset-password'))}
+            hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
+          >
+            <Body size="sm" tone="tertiary" style={{ fontWeight: '500' }}>
+              Forgot password?
+            </Body>
+          </TouchableOpacity>
+        }
       />
-
-      <TouchableOpacity
-        style={{ alignSelf: 'flex-end', marginBottom: space.xxl }}
-        onPress={withHaptic(() => router.push('/auth/reset-password'))}
-        hitSlop={{ top: 8, bottom: 8, left: 8, right: 8 }}
-      >
-        <Mono small tone="tertiary">
-          Forgot password?
-        </Mono>
-      </TouchableOpacity>
 
       <AuthError message={error} />
 
@@ -87,9 +87,9 @@ export default function LoginScreen() {
           Don't have an account?{' '}
         </Body>
         <TouchableOpacity onPress={withHaptic(() => router.replace('/auth/signup'))}>
-          <Mono small tone="tertiary">
+          <Body size="sm" tone="tertiary" style={{ fontWeight: '500' }}>
             Sign up free
-          </Mono>
+          </Body>
         </TouchableOpacity>
       </View>
     </AuthShell>

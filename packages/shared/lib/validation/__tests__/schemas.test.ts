@@ -14,7 +14,7 @@ describe('schemas', () => {
     it('should validate valid find remedy requests', () => {
       const valid = {
         symptoms: ['itching', 'fever'],
-        bookId: 'boericke'
+        bookId: 'boericke-MM'
       };
       const result = findRemedySchema.safeParse(valid);
       expect(result.success).toBe(true);
@@ -32,7 +32,7 @@ describe('schemas', () => {
     it('should reject empty symptoms array', () => {
       const invalid = {
         symptoms: [],
-        bookId: 'boericke'
+        bookId: 'boericke-MM'
       };
       const result = findRemedySchema.safeParse(invalid);
       expect(result.success).toBe(false);
@@ -44,7 +44,7 @@ describe('schemas', () => {
       const valid = {
         name: 'John Doe',
         symptoms: ['itching'],
-        bookId: 'boericke'
+        bookId: 'boericke-MM'
       };
       const result = createCaseSchema.safeParse(valid);
       expect(result.success).toBe(true);
@@ -53,7 +53,7 @@ describe('schemas', () => {
     it('should allow title instead of name', () => {
       const valid = {
         title: 'Case Title',
-        bookId: 'boericke'
+        bookId: 'boericke-MM'
       };
       const result = createCaseSchema.safeParse(valid);
       expect(result.success).toBe(true);
@@ -61,7 +61,7 @@ describe('schemas', () => {
 
     it('should reject if both title and name are missing', () => {
       const invalid = {
-        bookId: 'boericke'
+        bookId: 'boericke-MM'
       };
       const result = createCaseSchema.safeParse(invalid);
       expect(result.success).toBe(false);
@@ -108,7 +108,7 @@ describe('schemas', () => {
         id: 's1',
         name: 'Symptom 1',
         synonyms: ['Syn 1'],
-        books: ['boericke']
+        books: ['boericke-MM']
       };
       const result = selectedSymptomSchema.safeParse(valid);
       expect(result.success).toBe(true);
@@ -134,7 +134,7 @@ describe('schemas', () => {
 
   describe('aiMatchSymptomsSchema', () => {
     it('should validate valid AI requests', () => {
-      const valid = { query: 'itch', selectedBooks: ['boericke'] };
+      const valid = { query: 'itch', selectedBooks: ['boericke-MM'] };
       expect(aiMatchSymptomsSchema.safeParse(valid).success).toBe(true);
     });
 

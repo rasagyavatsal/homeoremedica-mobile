@@ -81,7 +81,7 @@ export default function ChangePasswordScreen() {
   );
 
   return (
-    <AuthShell title="Change password" navHeader={navHeader}>
+    <AuthShell title="Change password" navHeader={navHeader} showBrand={false}>
       <PasswordInput
         label="Current password"
         placeholder="Enter current password"

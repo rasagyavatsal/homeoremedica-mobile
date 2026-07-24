@@ -1,6 +1,10 @@
 import { apiClient } from './api/client';
 
-export type BookType = 'boericke' | 'clarke' | 'kent' | 'allen';
+export type BookType =
+  | 'clarke-MM'
+  | 'boericke-MM'
+  | 'kent-lectures'
+  | 'allen-nosodes';
 
 export async function initDatabase(): Promise<void> {
   // Remedy data is server-side; no local database initialization is required.

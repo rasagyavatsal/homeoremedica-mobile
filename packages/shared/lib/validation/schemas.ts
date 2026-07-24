@@ -1,8 +1,17 @@
 import { z } from 'zod';
 
+export const BOOK_IDS = [
+  'clarke-MM',
+  'boericke-MM',
+  'kent-lectures',
+  'allen-nosodes',
+] as const;
+
+export const bookIdSchema = z.enum(BOOK_IDS);
+
 // Request validation schemas
 export const findRemedySchema = z.object({
-  bookId: z.enum(['boericke', 'clarke', 'kent', 'allen']),
+  bookId: bookIdSchema,
   symptoms: z.array(z.string().min(1)).min(1).max(20)
 });
 
@@ -10,7 +19,7 @@ export const selectedSymptomSchema = z.object({
   id: z.string().min(1),
   name: z.string().min(1),
   synonyms: z.array(z.string().min(1)).optional(),
-  books: z.array(z.enum(['boericke', 'clarke', 'kent', 'allen'])).optional(),
+  books: z.array(bookIdSchema).optional(),
   category: z.string().min(1).optional(),
 });
 
@@ -23,7 +32,7 @@ export const baseCaseSchema = z.object({
   title: z.string().min(1).max(200).optional(),
   name: z.string().min(1).max(200).optional(),
   note: z.string().max(2000).optional(),
-  bookId: z.string().min(1).optional(),
+  bookId: bookIdSchema.optional(),
   symptoms: z.array(z.string().min(1)).optional(),
   selectedSymptoms: z.array(selectedSymptomSchema).optional(),
   results: z.array(caseResultSchema).optional()
@@ -50,7 +59,7 @@ export const updateCaseSchema = baseCaseSchema.superRefine((data, ctx) => {
 
 export const aiMatchSymptomsSchema = z.object({
   query: z.string().min(1),
-  selectedBooks: z.array(z.enum(['boericke', 'clarke', 'kent', 'allen'])).optional(),
+  selectedBooks: z.array(bookIdSchema).optional(),
 });
 
 // Response validation schemas

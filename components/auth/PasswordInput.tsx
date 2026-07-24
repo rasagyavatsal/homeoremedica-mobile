@@ -12,6 +12,7 @@ export interface PasswordInputProps extends Omit<TextInputProps, 'secureTextEntr
   value: string;
   onChangeText: (text: string) => void;
   icon?: React.ReactNode;
+  rightLabel?: React.ReactNode;
 }
 
 export function PasswordInput({
@@ -20,6 +21,7 @@ export function PasswordInput({
   value,
   onChangeText,
   icon,
+  rightLabel,
   ...props
 }: PasswordInputProps) {
   const { colors } = useTheme();
@@ -37,6 +39,7 @@ export function PasswordInput({
       onChangeText={onChangeText}
       secureTextEntry={!showPassword}
       icon={defaultIcon}
+      rightLabel={rightLabel}
       autoCapitalize="none"
       rightElement={
         <TouchableOpacity

@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { type as t, useTheme } from '@/constants/theme';
-import { validatePassword } from '@homeoremedica/shared';
+import { PASSWORD_RULES, validatePassword } from '@homeoremedica/shared';
 
 export interface PasswordRequirementsProps {
   password: string;
@@ -14,11 +14,11 @@ export interface PasswordRequirementsProps {
 }
 
 const RULES = [
-  { key: 'length', label: '12+ characters' },
-  { key: 'uppercase', label: 'Uppercase letter' },
-  { key: 'lowercase', label: 'Lowercase letter' },
-  { key: 'number', label: 'Number' },
-  { key: 'symbol', label: 'Symbol' },
+  { key: 'length', label: PASSWORD_RULES.LENGTH },
+  { key: 'uppercase', label: PASSWORD_RULES.UPPERCASE },
+  { key: 'lowercase', label: PASSWORD_RULES.LOWERCASE },
+  { key: 'number', label: PASSWORD_RULES.NUMBER },
+  { key: 'symbol', label: PASSWORD_RULES.SYMBOL },
 ] as const;
 
 export function PasswordRequirements({
@@ -40,7 +40,7 @@ export function PasswordRequirements({
         return (
           <View key={rule.key} style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
             <Ionicons
-              name={passed ? 'checkmark-circle' : 'ellipse-outline'}
+              name={passed ? 'checkmark' : 'close'}
               size={16}
               color={passed ? colors.success : colors.onSurfaceVariant}
             />
