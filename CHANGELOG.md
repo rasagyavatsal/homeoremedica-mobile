@@ -1,5 +1,13 @@
 # Changelog
 
+## [2.10.0](https://github.com/rasagyavatsal/homeoremedica-mobile/compare/homeoremedica-mobile-v2.9.1...homeoremedica-mobile-v2.10.0) (2026-07-24)
+
+
+### Features
+
+* **ui:** align mobile experience with web ([2ad3dd3](https://github.com/rasagyavatsal/homeoremedica-mobile/commit/2ad3dd37c61c36f76393d4bbedff17be3eb3340c))
+* **ui:** align mobile experience with web ([0b1b4e5](https://github.com/rasagyavatsal/homeoremedica-mobile/commit/0b1b4e586ba37f2a86824a86220b71d19e600d84))
+
 ## [2.9.1](https://github.com/rasagyavatsal/homeoremedica-mobile/compare/homeoremedica-mobile-v2.9.0...homeoremedica-mobile-v2.9.1) (2026-07-12)
 
 
