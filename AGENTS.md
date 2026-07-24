@@ -10,12 +10,6 @@ Follow Conventional Commits v1.0.0.
 - Keep the description imperative, concise, and specific.
 - Use Conventional Commits for PR titles so squash merges preserve release metadata.
 
-## PR Messages
-
-Keep PR messages limited to a short summary of the change.
-
-- Include only the essential summary needed to explain what changed.
-- Do not add detailed implementation notes, exhaustive change lists, validation steps or unnecessary boilerplate unless explicitly requested.
 
 ## Validation
 
@@ -24,8 +18,8 @@ After every task completion where code is changed, run the relevant validation s
 Run these root scripts:
 - `typecheck`
 - `test`
-
-Run the scripts only on a connected device, no emulators. If there is no connected device, mention it in the output message.
+For UI chnages, validate it using android emulator, only if it is running. if not, skip this step and mention this in output message.
+If the change cant be validated, even after refresh, then skip and mention it in the output message, dont rebuild the app (I will do that myself).
 
 ## Test-Driven Development
 
