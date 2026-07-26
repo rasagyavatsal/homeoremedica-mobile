@@ -1,5 +1,4 @@
-import { describe, it, expect, beforeEach } from 'vitest';
-import { normalizeCaseFromApi } from '../cases-store';
+import { normalizeCaseFromApi } from '../create-cases-store';
 import {
   createMockApiClientTyped,
   createMockGetTokenTyped,
@@ -8,7 +7,7 @@ import {
   caseFixtures,
   MockApiClient,
   MockGetToken,
-} from './cases-store-harness';
+} from '../testing/cases-store-harness';
 
 describe('cases-store integration', () => {
   let mockApiClient: MockApiClient;

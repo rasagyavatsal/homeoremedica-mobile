@@ -3,7 +3,7 @@ import { Text, View } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
 import { type as t, useTheme } from '@/constants/theme';
-import { PASSWORD_RULES, validatePassword } from '@homeoremedica/shared';
+import { PASSWORD_RULES, validatePassword } from '@/lib/validation/password';
 
 export interface PasswordRequirementsProps {
   password: string;

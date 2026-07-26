@@ -1,4 +1,3 @@
-import { describe, it, expect } from 'vitest';
 import { validatePassword } from '../password';
 
 describe('validatePassword', () => {
@@ -83,7 +82,7 @@ describe('validatePassword', () => {
       expect(result.rules.common.passed).toBe(false);
       expect(result.unmetRules).toContain('common');
     });
-    
+
     it("rejects 'Password1!' if too common", () => {
       const result = validatePassword({ password: 'Password1!' });
       expect(result.rules.common.passed).toBe(false);
@@ -130,7 +129,7 @@ describe('validatePassword', () => {
       expect(result.rules.match?.passed).toBe(false);
       expect(result.unmetRules).toContain('match');
     });
-    
+
     it('passes when passwords match', () => {
       const result = validatePassword({ password: 'Password123!', confirmPassword: 'Password123!' });
       expect(result.rules.match?.passed).toBe(true);

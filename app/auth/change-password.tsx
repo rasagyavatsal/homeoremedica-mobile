@@ -7,7 +7,7 @@ import { Button } from '@/components/ui/Button';
 import { useTheme } from '@/constants/theme';
 import { withHaptic } from '@/lib/haptics';
 import { useAuthStore } from '@/lib/stores/auth-store';
-import { validatePassword } from '@homeoremedica/shared';
+import { validatePassword } from '@/lib/validation/password';
 import { AuthShell, AuthError, PasswordInput, PasswordRequirements, useAuthSubmit } from '@/components/auth';
 
 export default function ChangePasswordScreen() {

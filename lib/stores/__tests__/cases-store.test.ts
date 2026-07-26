@@ -1,5 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createCasesStore, isNonEmptyString, normalizeCaseFromApi, isValidCase } from '../cases-store';
+import {
+  createCasesStore,
+  isNonEmptyString,
+  isValidCase,
+  normalizeCaseFromApi,
+} from '../create-cases-store';
 
 describe('cases-store utilities', () => {
   describe('isNonEmptyString', () => {
@@ -32,7 +36,7 @@ describe('cases-store utilities', () => {
         userId: 'u1',
         createdAt: now
       };
-      
+
       const result = normalizeCaseFromApi(apiData);
       expect(result).toEqual({
         id: '1',
@@ -74,14 +78,14 @@ describe('cases-store', () => {
 
   beforeEach(() => {
     mockApiClient = {
-      setAuthToken: vi.fn(),
-      getCases: vi.fn().mockResolvedValue({ cases: [] }),
-      createCase: vi.fn(),
-      updateCase: vi.fn(),
-      deleteCase: vi.fn(),
+      setAuthToken: jest.fn(),
+      getCases: jest.fn().mockResolvedValue({ cases: [] }),
+      createCase: jest.fn(),
+      updateCase: jest.fn(),
+      deleteCase: jest.fn(),
     };
 
-    mockGetToken = vi.fn().mockResolvedValue('test-token');
+    mockGetToken = jest.fn().mockResolvedValue('test-token');
   });
 
   it('should initialize with default state', () => {
@@ -89,7 +93,7 @@ describe('cases-store', () => {
       apiClient: mockApiClient,
       getToken: mockGetToken,
     });
-    
+
     const state = useCasesStore.getState();
     expect(state.cases).toEqual([]);
     expect(state.loading).toBe(false);
@@ -158,7 +162,13 @@ describe('cases-store', () => {
       getToken: mockGetToken,
     });
 
-    const initialCase = { id: '1', name: 'Old Name', userId: 'u1', timestamp: new Date() };
+    const initialCase = {
+      id: '1',
+      name: 'Old Name',
+      userId: 'u1',
+      selectedSymptoms: [],
+      timestamp: new Date(),
+    };
     useCasesStore.setState({ cases: [initialCase] });
 
     const updatedData = { id: '1', name: 'New Name', userId: 'u1', createdAt: new Date().toISOString() };
@@ -190,8 +200,8 @@ describe('cases-store', () => {
     });
 
     const initialCases = [
-      { id: '1', name: 'Case 1', userId: 'u1', timestamp: new Date() },
-      { id: '2', name: 'Case 2', userId: 'u1', timestamp: new Date() },
+      { id: '1', name: 'Case 1', userId: 'u1', selectedSymptoms: [], timestamp: new Date() },
+      { id: '2', name: 'Case 2', userId: 'u1', selectedSymptoms: [], timestamp: new Date() },
     ];
     useCasesStore.setState({ cases: initialCases, selectedCase: initialCases[0] });
 
@@ -214,7 +224,7 @@ describe('cases-store', () => {
 
     await expect(useCasesStore.getState().deleteCase(''))
       .rejects.toThrow('Invalid case ID');
-    
+
     expect(useCasesStore.getState().cases).toHaveLength(0);
   });
 
@@ -243,8 +253,8 @@ describe('cases-store', () => {
       getToken: mockGetToken,
     });
 
-    useCasesStore.setState({ 
-      cases: [{ id: '1' }] as any, 
+    useCasesStore.setState({
+      cases: [{ id: '1' }] as any,
       selectedCase: { id: '1' } as any,
       error: 'some error'
     });

@@ -1,7 +1,6 @@
 import { auth } from '../firebase';
 import { GoogleAuthProvider, signInWithCredential } from 'firebase/auth';
-import { createFirebaseAuthCore, mapFirebaseUser } from '@homeoremedica/shared';
-import type { FirebaseUser } from '@homeoremedica/shared';
+import { createFirebaseAuthCore, mapFirebaseUser, type FirebaseUser } from './core';
 
 const core = createFirebaseAuthCore({
   auth,

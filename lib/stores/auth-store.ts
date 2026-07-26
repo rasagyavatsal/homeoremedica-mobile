@@ -1,14 +1,16 @@
-import { createAuthStore, AuthAdapter } from '@homeoremedica/shared';
-import { 
-  signInWithEmail, 
-  signUpWithEmail, 
-  signInWithGoogle,
-  signOutUser, 
+import type { StateStorage } from 'zustand/middleware';
+
+import { apiClient } from '@/lib/api/client';
+import {
+  changePassword as firebaseChangePassword,
   getCurrentUserToken,
   onIdTokenChange,
-  changePassword as firebaseChangePassword
+  signInWithEmail,
+  signInWithGoogle,
+  signOutUser,
+  signUpWithEmail,
 } from '@/lib/auth/firebase-auth';
-import { apiClient } from '@/lib/api/client';
+import { createAuthStore, type AuthAdapter } from './create-auth-store';
 
 const rnAuthAdapter: AuthAdapter = {
   signInWithEmail,
@@ -20,11 +22,12 @@ const rnAuthAdapter: AuthAdapter = {
   changePassword: firebaseChangePassword,
 };
 
-// Helper to safely get AsyncStorage
-const getStorageFallback = () => {
+function getStorageFallback(): StateStorage {
   try {
     const AsyncStorage = require('@react-native-async-storage/async-storage').default;
-    if (!AsyncStorage) throw new Error('AsyncStorage is null');
+    if (!AsyncStorage) {
+      throw new Error('AsyncStorage is null');
+    }
     return AsyncStorage;
   } catch (error) {
     console.warn('AsyncStorage is not available. Using in-memory storage fallback.', error);
@@ -40,12 +43,10 @@ const getStorageFallback = () => {
       },
     };
   }
-};
-
-const rnStorage = getStorageFallback();
+}
 
 export const useAuthStore = createAuthStore({
   apiClient,
   authAdapter: rnAuthAdapter,
-  storage: rnStorage,
+  storage: getStorageFallback(),
 });

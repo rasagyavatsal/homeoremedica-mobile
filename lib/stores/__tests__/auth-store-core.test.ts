@@ -1,5 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createAuthStore } from '../auth-store';
+import { createAuthStore } from '../create-auth-store';
 
 describe('auth-store', () => {
   let mockApiClient: any;
@@ -8,24 +7,24 @@ describe('auth-store', () => {
 
   beforeEach(() => {
     mockApiClient = {
-      setAuthToken: vi.fn(),
-      getSession: vi.fn().mockResolvedValue({}),
+      setAuthToken: jest.fn(),
+      getSession: jest.fn().mockResolvedValue({}),
     };
 
     mockAuthAdapter = {
-      signInWithEmail: vi.fn(),
-      signUpWithEmail: vi.fn(),
-      signInWithGoogle: vi.fn(),
-      signOutUser: vi.fn(),
-      getCurrentUserToken: vi.fn().mockResolvedValue('test-token'),
-      onIdTokenChange: vi.fn(),
-      changePassword: vi.fn(),
+      signInWithEmail: jest.fn(),
+      signUpWithEmail: jest.fn(),
+      signInWithGoogle: jest.fn(),
+      signOutUser: jest.fn(),
+      getCurrentUserToken: jest.fn().mockResolvedValue('test-token'),
+      onIdTokenChange: jest.fn(),
+      changePassword: jest.fn(),
     };
 
     mockStorage = {
-      getItem: vi.fn(),
-      setItem: vi.fn(),
-      removeItem: vi.fn(),
+      getItem: jest.fn(),
+      setItem: jest.fn(),
+      removeItem: jest.fn(),
     };
   });
 
@@ -35,7 +34,7 @@ describe('auth-store', () => {
       authAdapter: mockAuthAdapter,
       storage: mockStorage,
     });
-    
+
     const state = useAuthStore.getState();
     expect(state.user).toBeNull();
     expect(state.loading).toBe(false);
@@ -142,9 +141,9 @@ describe('auth-store', () => {
 
     try {
       await useAuthStore.getState().signInWithGoogle();
-      expect.fail('Should have thrown');
+      throw new Error('Expected signInWithGoogle to throw');
     } catch (error: any) {
-      if (error.name === 'AssertionError') throw error;
+      if (error.message === 'Expected signInWithGoogle to throw') throw error;
       expect(error.message).toContain('Failed to connect to backend');
       expect(error.code).toBe('backend/connection-failed');
     }
@@ -153,7 +152,7 @@ describe('auth-store', () => {
   });
 
   it('should logout successfully', async () => {
-    const onLogout = vi.fn();
+    const onLogout = jest.fn();
     const useAuthStore = createAuthStore({
       apiClient: mockApiClient,
       authAdapter: mockAuthAdapter,
@@ -163,7 +162,7 @@ describe('auth-store', () => {
 
     // Manually set user first
     useAuthStore.getState().setUser({ id: '123', email: 'test@example.com', name: 'Test User' });
-    
+
     await useAuthStore.getState().logout();
 
     const state = useAuthStore.getState();
@@ -203,7 +202,7 @@ describe('auth-store', () => {
   });
 
   it('should initialize auth listener correctly', () => {
-    const unsubscribe = vi.fn();
+    const unsubscribe = jest.fn();
     mockAuthAdapter.onIdTokenChange.mockReturnValue(unsubscribe);
 
     const useAuthStore = createAuthStore({
@@ -219,9 +218,9 @@ describe('auth-store', () => {
     // Simulate token change with user
     const callback = mockAuthAdapter.onIdTokenChange.mock.calls[0][0];
     const firebaseUser = { uid: '456', email: 'other@example.com', displayName: 'Other User' };
-    
+
     callback('new-token', firebaseUser);
-    
+
     let state = useAuthStore.getState();
     expect(state.user).toEqual({
       id: '456',

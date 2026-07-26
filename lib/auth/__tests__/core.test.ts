@@ -1,11 +1,10 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { createFirebaseAuthCore, mapFirebaseUser } from '../core';
-import { 
-  Auth, 
-  User, 
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  signOut, 
+import {
+  Auth,
+  User,
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
   onAuthStateChanged,
   onIdTokenChanged,
   sendPasswordResetEmail,
@@ -15,21 +14,21 @@ import {
   EmailAuthProvider
 } from 'firebase/auth';
 
-vi.mock('firebase/auth', () => ({
-  reauthenticateWithCredential: vi.fn(),
-  updatePassword: vi.fn(),
+jest.mock('firebase/auth', () => ({
+  reauthenticateWithCredential: jest.fn(),
+  updatePassword: jest.fn(),
   EmailAuthProvider: {
-    credential: vi.fn(),
+    credential: jest.fn(),
   },
-  signInWithEmailAndPassword: vi.fn(),
-  createUserWithEmailAndPassword: vi.fn(),
-  signOut: vi.fn(),
-  onAuthStateChanged: vi.fn(),
-  onIdTokenChanged: vi.fn(),
-  sendPasswordResetEmail: vi.fn(),
-  updateProfile: vi.fn(),
-  GoogleAuthProvider: vi.fn(),
-  signInWithPopup: vi.fn(),
+  signInWithEmailAndPassword: jest.fn(),
+  createUserWithEmailAndPassword: jest.fn(),
+  signOut: jest.fn(),
+  onAuthStateChanged: jest.fn(),
+  onIdTokenChanged: jest.fn(),
+  sendPasswordResetEmail: jest.fn(),
+  updateProfile: jest.fn(),
+  GoogleAuthProvider: jest.fn(),
+  signInWithPopup: jest.fn(),
 }));
 
 describe('FirebaseAuthCore', () => {
@@ -38,9 +37,9 @@ describe('FirebaseAuthCore', () => {
   let mockGoogleSignOut: any;
 
   beforeEach(() => {
-    vi.clearAllMocks();
-    mockGoogleSignIn = vi.fn();
-    mockGoogleSignOut = vi.fn();
+    jest.clearAllMocks();
+    mockGoogleSignIn = jest.fn();
+    mockGoogleSignOut = jest.fn();
     mockAuth = {
       currentUser: null,
     };
@@ -108,7 +107,7 @@ describe('FirebaseAuthCore', () => {
         uid: 'uid-123',
         email: 'test@example.com',
         displayName: 'Test User',
-        getIdToken: vi.fn().mockResolvedValue('token-123'),
+        getIdToken: jest.fn().mockResolvedValue('token-123'),
       };
       (createUserWithEmailAndPassword as any).mockResolvedValue({ user: mockUser });
 
@@ -192,7 +191,7 @@ describe('FirebaseAuthCore', () => {
         signInWithGoogle: mockGoogleSignIn,
       });
 
-      const mockCallback = vi.fn();
+      const mockCallback = jest.fn();
       const unsubscribe = core.onIdTokenChange(mockCallback);
 
       expect(onIdTokenChanged).toHaveBeenCalledWith(mockAuth, expect.any(Function));
@@ -207,7 +206,7 @@ describe('FirebaseAuthCore', () => {
         uid: 'uid-123',
         email: 'test@example.com',
         displayName: 'Test User',
-        getIdToken: vi.fn().mockResolvedValue('token-abc'),
+        getIdToken: jest.fn().mockResolvedValue('token-abc'),
       };
       await registeredCallback(mockUser);
       expect(mockUser.getIdToken).toHaveBeenCalled();

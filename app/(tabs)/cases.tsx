@@ -13,7 +13,7 @@ import { useCasesStore } from '@/lib/stores/cases-store';
 import { useAuthStore } from '@/lib/stores/auth-store';
 import { useAppContext } from '@/context/AppContext';
 import { withHaptic } from '@/lib/haptics';
-import { Case } from '@homeoremedica/shared';
+import type { Case } from '@/types';
 
 export default function CasesScreen() {
   const { colors } = useTheme();

@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { persist, createJSONStorage, StateStorage } from 'zustand/middleware';
-import { User } from '../../types';
+import { createJSONStorage, persist, type StateStorage } from 'zustand/middleware';
+
+import type { User } from '../../types';
 
 export interface FirebaseUser {
   uid: string;
@@ -34,7 +35,7 @@ export interface AuthState {
   user: User | null;
   loading: boolean;
   initialized: boolean;
-  
+
   // Actions
   signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, name?: string) => Promise<void>;
@@ -54,7 +55,7 @@ export function createAuthStore(config: AuthStoreConfig) {
         user: null,
         loading: false,
         initialized: false,
-        
+
         signIn: async (email: string, password: string) => {
           set({ loading: true });
           try {
@@ -75,14 +76,14 @@ export function createAuthStore(config: AuthStoreConfig) {
               email: firebaseUser.email,
               name: firebaseUser.displayName || '',
             };
-            
+
             set({ user, loading: false });
           } catch (error) {
             set({ loading: false });
             throw error;
           }
         },
-        
+
         signUp: async (email: string, password: string, name?: string) => {
           set({ loading: true });
           try {
@@ -103,7 +104,7 @@ export function createAuthStore(config: AuthStoreConfig) {
               email: firebaseUser.email,
               name: name || firebaseUser.displayName || '',
             };
-            
+
             set({ user, loading: false });
           } catch (error) {
             set({ loading: false });
@@ -131,22 +132,22 @@ export function createAuthStore(config: AuthStoreConfig) {
               email: firebaseUser.email,
               name: firebaseUser.displayName || '',
             };
-            
+
             set({ user, loading: false });
           } catch (error: any) {
             set({ loading: false });
             console.error('signInWithGoogle error in store:', error);
-            
+
             if (error?.message?.includes('fetch') || error?.message?.includes('network')) {
               const backendError = new Error('Failed to connect to backend. Please check your connection.');
               (backendError as any).code = 'backend/connection-failed';
               throw backendError;
             }
-            
+
             throw error;
           }
         },
-        
+
         logout: async () => {
           await authAdapter.signOutUser();
           apiClient.setAuthToken(null);
@@ -159,7 +160,7 @@ export function createAuthStore(config: AuthStoreConfig) {
         changePassword: async (currentPassword, newPassword) => {
           await authAdapter.changePassword(currentPassword, newPassword);
         },
-        
+
         setUser: (user) => set({ user }),
 
         initializeAuthListener: () => {
@@ -167,7 +168,7 @@ export function createAuthStore(config: AuthStoreConfig) {
             apiClient.setAuthToken(token);
             if (firebaseUser) {
               const currentUser = get().user;
-              set({ 
+              set({
                 user: {
                   id: firebaseUser.uid,
                   email: firebaseUser.email,

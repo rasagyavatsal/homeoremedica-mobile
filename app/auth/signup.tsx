@@ -9,7 +9,7 @@ import { Body } from '@/components/ui/Type';
 import { space, useTheme } from '@/constants/theme';
 import { withHaptic } from '@/lib/haptics';
 import { useAuthStore } from '@/lib/stores/auth-store';
-import { validatePassword, PASSWORD_RULES } from '@homeoremedica/shared';
+import { PASSWORD_RULES, validatePassword } from '@/lib/validation/password';
 import { AuthShell, AuthError, PasswordInput, PasswordRequirements, GoogleSignInSection, useAuthSubmit } from '@/components/auth';
 
 export default function SignupScreen() {

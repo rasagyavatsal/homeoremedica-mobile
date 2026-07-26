@@ -1,9 +1,9 @@
-import { 
+import {
   Auth,
   User,
-  signInWithEmailAndPassword, 
-  createUserWithEmailAndPassword, 
-  signOut, 
+  signInWithEmailAndPassword,
+  createUserWithEmailAndPassword,
+  signOut,
   onAuthStateChanged,
   onIdTokenChanged,
   sendPasswordResetEmail,

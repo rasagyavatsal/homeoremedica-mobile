@@ -1,28 +1,27 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createAuthStore } from '../auth-store';
+import { createAuthStore } from '../create-auth-store';
 
 describe('AuthStore Integration with Persistence', () => {
   let mockApiClient: any;
   let mockAuthAdapter: any;
   let mockStorageData: Record<string, string> = {};
-  
+
   const mockStorage = {
-    getItem: vi.fn((name: string) => mockStorageData[name] || null),
-    setItem: vi.fn((name: string, value: string) => {
+    getItem: jest.fn((name: string) => mockStorageData[name] || null),
+    setItem: jest.fn((name: string, value: string) => {
       mockStorageData[name] = value;
     }),
-    removeItem: vi.fn((name: string) => {
+    removeItem: jest.fn((name: string) => {
       delete mockStorageData[name];
     }),
   };
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     mockStorageData = {};
-    mockApiClient = { setAuthToken: vi.fn() };
-    mockAuthAdapter = { 
-      onIdTokenChange: vi.fn().mockReturnValue(() => {}),
-      signOutUser: vi.fn().mockResolvedValue(undefined),
+    mockApiClient = { setAuthToken: jest.fn() };
+    mockAuthAdapter = {
+      onIdTokenChange: jest.fn().mockReturnValue(() => {}),
+      signOutUser: jest.fn().mockResolvedValue(undefined),
     };
   });
 
