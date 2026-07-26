@@ -1,6 +1,7 @@
 import { create } from 'zustand';
-import { BookId, Case, Symptom } from '../../types';
-import { ApiClient } from '../api/client';
+
+import type { BookId, Case, Symptom } from '../../types';
+import type { ApiClient } from '../api/client';
 
 export function isNonEmptyString(value: unknown): value is string {
   return typeof value === 'string' && value.trim().length > 0;
@@ -41,7 +42,7 @@ export interface CasesState {
   selectedCase: Case | null;
   loading: boolean;
   error: string | null;
-  
+
   loadUserCases: (userId?: string) => Promise<void>;
   addCase: (name: string, selectedSymptoms: Symptom[], bookId?: BookId, userId?: string) => Promise<void>;
   updateCase: (id: string, updates: CaseUpdates) => Promise<void>;
@@ -72,14 +73,14 @@ export function createCasesStore(config: CasesStoreConfig) {
     selectedCase: null,
     loading: false,
     error: null,
-    
+
     clearCases: () => set({
       cases: [],
       selectedCase: null,
       loading: false,
       error: null,
     }),
-    
+
     loadUserCases: async (userId?: string) => {
       set({ loading: true, error: null });
       try {
@@ -96,14 +97,14 @@ export function createCasesStore(config: CasesStoreConfig) {
               .map((caseData: any) => normalizeCaseFromApi(caseData))
               .filter((item: Case | null): item is Case => Boolean(item))
           : [];
-        
+
         set({ cases, loading: false });
       } catch (error: any) {
         console.error('Error loading cases:', error);
         set({ loading: false, error: error.message || 'Failed to load cases' });
       }
     },
-    
+
     addCase: async (name: string, selectedSymptoms: Symptom[], bookId?: BookId, userId?: string) => {
       try {
         const token = await getToken();
@@ -118,7 +119,7 @@ export function createCasesStore(config: CasesStoreConfig) {
 
         const newCase = normalizeCaseFromApi(caseData);
         if (!newCase) throw new Error('Invalid response from server: missing case id');
-        
+
         set((state) => ({
           cases: [newCase, ...state.cases].filter(isValidCase),
           selectedCase: newCase
@@ -128,7 +129,7 @@ export function createCasesStore(config: CasesStoreConfig) {
         throw error;
       }
     },
-    
+
     updateCase: async (id: string, updates: CaseUpdates) => {
       try {
         const token = await getToken();
@@ -138,7 +139,7 @@ export function createCasesStore(config: CasesStoreConfig) {
         const caseData = await apiClient.updateCase(id, updates);
         const updatedCase = normalizeCaseFromApi({ ...caseData, id: caseData?.id || id });
         if (!updatedCase) throw new Error('Invalid response from server: missing case id');
-        
+
         set((state) => ({
           cases: replaceCase(state.cases, id, updatedCase),
           selectedCase: state.selectedCase?.id === id ? updatedCase : state.selectedCase
@@ -148,7 +149,7 @@ export function createCasesStore(config: CasesStoreConfig) {
         throw error;
       }
     },
-    
+
     deleteCase: async (id: string) => {
       try {
         if (!id || typeof id !== 'string' || id.trim() === '') {
@@ -164,7 +165,7 @@ export function createCasesStore(config: CasesStoreConfig) {
         apiClient.setAuthToken(token);
 
         await apiClient.deleteCase(id);
-        
+
         set((state) => ({
           cases: removeCaseById(state.cases, id),
           selectedCase: state.selectedCase?.id === id ? null : state.selectedCase
@@ -174,7 +175,7 @@ export function createCasesStore(config: CasesStoreConfig) {
         throw error;
       }
     },
-    
+
     selectCase: (id: string | null) => {
       const { cases } = get();
       const selectedCase = id ? cases.find(c => c.id === id) || null : null;

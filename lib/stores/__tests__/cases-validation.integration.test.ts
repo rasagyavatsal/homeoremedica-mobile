@@ -1,5 +1,4 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createCasesStore } from '../cases-store';
+import { createCasesStore } from '../create-cases-store';
 import { ApiClient } from '../../api/client';
 
 describe('CasesStore Integration with Zod Validation', () => {
@@ -7,11 +6,11 @@ describe('CasesStore Integration with Zod Validation', () => {
   let mockGetToken: any;
 
   beforeEach(() => {
-    vi.clearAllMocks();
+    jest.clearAllMocks();
     mockApiClient = new ApiClient('http://test.com');
     // Mock the request method to intercept calls
-    vi.spyOn(mockApiClient as any, 'request').mockResolvedValue({});
-    mockGetToken = vi.fn().mockResolvedValue('test-token');
+    jest.spyOn(mockApiClient as any, 'request').mockResolvedValue({});
+    mockGetToken = jest.fn().mockResolvedValue('test-token');
   });
 
   it('should prevent adding a case with empty patient name', async () => {
@@ -35,7 +34,7 @@ describe('CasesStore Integration with Zod Validation', () => {
     });
 
     const mockResponse = { id: 'case-123', name: 'John Doe', userId: 'u1', createdAt: new Date().toISOString() };
-    vi.spyOn(mockApiClient as any, 'request').mockResolvedValue(mockResponse);
+    jest.spyOn(mockApiClient as any, 'request').mockResolvedValue(mockResponse);
 
     await useCasesStore.getState().addCase('John Doe', []);
 
@@ -64,7 +63,7 @@ describe('CasesStore Integration with Zod Validation', () => {
     });
 
     const mockResponse = { id: 'case-123', name: 'Valid Case', userId: 'u1', createdAt: new Date().toISOString() };
-    vi.spyOn(mockApiClient as any, 'request').mockResolvedValue(mockResponse);
+    jest.spyOn(mockApiClient as any, 'request').mockResolvedValue(mockResponse);
 
     await useCasesStore.getState().addCase('Valid Patient', [{ id: 's1', name: 'headache' }]);
 

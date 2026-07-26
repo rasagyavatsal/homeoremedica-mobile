@@ -1,18 +1,20 @@
-import { describe, it, expect, vi, beforeEach, afterEach } from 'vitest';
 import { ApiClient } from '../client';
 
 describe('ApiClient', () => {
   let client: ApiClient;
-  let fetchSpy: ReturnType<typeof vi.fn>;
+  let fetchSpy: jest.Mock;
+  let originalFetch: typeof fetch;
 
   beforeEach(() => {
     client = new ApiClient('http://localhost:3000/api');
-    fetchSpy = vi.fn();
-    vi.stubGlobal('fetch', fetchSpy);
+    originalFetch = globalThis.fetch;
+    fetchSpy = jest.fn();
+    globalThis.fetch = fetchSpy as typeof fetch;
   });
 
   afterEach(() => {
-    vi.restoreAllMocks();
+    globalThis.fetch = originalFetch;
+    jest.restoreAllMocks();
   });
 
   function mockFetchResponse(body: any, status = 200) {

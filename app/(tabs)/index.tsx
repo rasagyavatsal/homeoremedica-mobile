@@ -10,7 +10,7 @@ import {
   View,
 } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { Symptom } from '@homeoremedica/shared';
+import type { Symptom } from '@/types';
 
 import { DatabaseGate } from '@/components/DatabaseGate';
 import { SymptomSearchModal } from '@/components/finder/SymptomSearchModal';

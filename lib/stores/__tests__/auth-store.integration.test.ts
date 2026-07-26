@@ -1,6 +1,9 @@
-import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { createAuthStore } from '../auth-store';
-import { createMockApiClient, createMockAuthAdapter, createMockStorage } from '../../__tests__/test-utils';
+import { createAuthStore } from '../create-auth-store';
+import {
+  createMockApiClient,
+  createMockAuthAdapter,
+  createMockStorage,
+} from '../testing/test-utils';
 
 describe('auth-store integration', () => {
   let mockApiClient: ReturnType<typeof createMockApiClient>;
@@ -182,7 +185,7 @@ describe('auth-store integration', () => {
 
   describe('onLogout callback', () => {
     it('fires on logout', async () => {
-      const onLogout = vi.fn();
+      const onLogout = jest.fn();
 
       const store = createAuthStore({
         apiClient: mockApiClient as any,

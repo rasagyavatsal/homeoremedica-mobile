@@ -1,16 +1,15 @@
-import { vi } from 'vitest';
-import { createMockApiClient } from '../../__tests__/test-utils';
-import { createCasesStore } from '../cases-store';
+import { createMockApiClient } from './test-utils';
+import { createCasesStore } from '../create-cases-store';
 
 export type MockApiClient = ReturnType<typeof createMockApiClient>;
-export type MockGetToken = ReturnType<typeof vi.fn<() => Promise<string | null>>>;
+export type MockGetToken = jest.Mock<Promise<string | null>, []>;
 
 export function createMockApiClientTyped(): MockApiClient {
   return createMockApiClient() as any;
 }
 
 export function createMockGetTokenTyped(tokenValue: string | null = 'test-token'): MockGetToken {
-  return vi.fn<() => Promise<string | null>>().mockResolvedValue(tokenValue);
+  return jest.fn<Promise<string | null>, []>().mockResolvedValue(tokenValue);
 }
 
 export function createTestCasesStore(apiClient: MockApiClient, getToken: MockGetToken) {
@@ -22,6 +21,7 @@ export const caseFixtures = {
   case2: { id: '2', name: 'Case 2', userId: 'u1', createdAt: '2026-06-04T00:00:00.000Z' },
 };
 
+/** Loads cases through the public store action for integration tests. */
 export async function loadCasesIntoStore(
   store: ReturnType<typeof createTestCasesStore>,
   apiClient: MockApiClient,
