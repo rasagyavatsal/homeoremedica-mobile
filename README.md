@@ -10,7 +10,22 @@ npm install
 npm start
 ```
 
-Run checks with `npm run typecheck` and `npm test`. Android development uses `npm run android` with Java 17.
+Run checks with `npm run typecheck` and `npm test`.
+
+### Android
+
+Install JDK 17 and the Android SDK, then configure these machine-level environment variables:
+
+- `JAVA_HOME`: the local JDK 17 directory.
+- `ANDROID_HOME`: `$HOME/Library/Android/sdk` on macOS or `%LOCALAPPDATA%\Android\Sdk` on Windows.
+- `PATH`: include the `bin` directory under `JAVA_HOME` and the `platform-tools` and `emulator` directories under `ANDROID_HOME`.
+
+Create an Android virtual device named `Medium_Phone`, place the ignored development `google-services.json` in the repository root, then run:
+
+```sh
+npm run emulator
+npm run android
+```
 
 ## Production
 
