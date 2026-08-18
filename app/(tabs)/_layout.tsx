@@ -25,6 +25,10 @@ function SearchTabIcon({ color, focused }: TabIconProps) {
   return <Ionicons name={focused ? 'search' : 'search-outline'} size={22} color={color} />;
 }
 
+function ChatTabIcon({ color, focused }: TabIconProps) {
+  return <Ionicons name={focused ? 'chatbubbles' : 'chatbubbles-outline'} size={22} color={color} />;
+}
+
 function CasesTabIcon({ color, focused }: TabIconProps) {
   return <Ionicons name={focused ? 'file-tray-full' : 'file-tray-outline'} size={22} color={color} />;
 }
@@ -80,6 +84,15 @@ export default function TabLayout() {
           tabBarLabel: 'Find Remedy',
           tabBarIcon: SearchTabIcon,
           tabBarButtonTestID: 'tab-finder',
+        }}
+      />
+      <Tabs.Screen
+        name="chat"
+        options={{
+          title: 'Chat',
+          tabBarLabel: 'Chat',
+          tabBarIcon: ChatTabIcon,
+          tabBarButtonTestID: 'tab-chat',
         }}
       />
       <Tabs.Screen

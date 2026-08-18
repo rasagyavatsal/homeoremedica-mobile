@@ -148,6 +148,11 @@ export const space = {
   page: 16,
 } as const;
 
+export const sizes = {
+  touch: 44,
+  iconButton: 40,
+} as const;
+
 const systemSans = Platform.select({
   ios: 'Avenir Next',
   default: 'sans-serif',
