@@ -1,7 +1,7 @@
 {
   "name": "@homeoremedica/mobile",
   "main": "expo-router/entry",
-  "version": "2.9.1",
+  "version": "2.10.0",
   "scripts": {
     "start": "expo start",
     "emulator": "emulator -avd Medium_Phone",
