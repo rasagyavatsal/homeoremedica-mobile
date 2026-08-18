@@ -69,7 +69,7 @@ export default function SignupScreen() {
   };
 
   return (
-    <AuthShell title="Sign up" subtitle="Save cases across devices.">
+    <AuthShell title="Sign up" subtitle="Ask the materia medica, with every answer cited.">
       <Input
         label="Name"
         placeholder="Your name"

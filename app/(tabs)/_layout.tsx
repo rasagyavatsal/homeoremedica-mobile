@@ -21,16 +21,8 @@ function HapticTabButton(props: any) {
   );
 }
 
-function SearchTabIcon({ color, focused }: TabIconProps) {
-  return <Ionicons name={focused ? 'search' : 'search-outline'} size={22} color={color} />;
-}
-
 function ChatTabIcon({ color, focused }: TabIconProps) {
   return <Ionicons name={focused ? 'chatbubbles' : 'chatbubbles-outline'} size={22} color={color} />;
-}
-
-function CasesTabIcon({ color, focused }: TabIconProps) {
-  return <Ionicons name={focused ? 'file-tray-full' : 'file-tray-outline'} size={22} color={color} />;
 }
 
 function ProfileTabIcon({ color, focused }: TabIconProps) {
@@ -80,28 +72,10 @@ export default function TabLayout() {
       <Tabs.Screen
         name="index"
         options={{
-          headerTitle: () => <BrandLockup />,
-          tabBarLabel: 'Find Remedy',
-          tabBarIcon: SearchTabIcon,
-          tabBarButtonTestID: 'tab-finder',
-        }}
-      />
-      <Tabs.Screen
-        name="chat"
-        options={{
           title: 'Chat',
           tabBarLabel: 'Chat',
           tabBarIcon: ChatTabIcon,
           tabBarButtonTestID: 'tab-chat',
-        }}
-      />
-      <Tabs.Screen
-        name="cases"
-        options={{
-          title: 'Saved cases',
-          tabBarLabel: 'Cases',
-          tabBarIcon: CasesTabIcon,
-          tabBarButtonTestID: 'tab-cases',
         }}
       />
       <Tabs.Screen
