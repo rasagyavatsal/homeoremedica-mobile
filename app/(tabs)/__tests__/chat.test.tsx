@@ -10,7 +10,7 @@ jest.mock('@/lib/api/chat-service', () => ({
 
 const mockSendChatMessage = sendChatMessage as jest.Mock;
 
-import ChatScreen from '../chat';
+import ChatScreen from '../index';
 
 jest.mock('@react-navigation/elements', () => ({
   useHeaderHeight: () => 0,

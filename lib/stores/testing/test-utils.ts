@@ -19,24 +19,6 @@ export function createMockApiClient(): jest.Mocked<ApiClient> {
     getSession: mockFunction<ApiClient['getSession']>().mockResolvedValue({
       user: { uid: 'mock-uid', email: 'mock@test.com' },
     }),
-    findRemedies: mockFunction<ApiClient['findRemedies']>().mockResolvedValue({
-      remedies: [],
-      totalMatches: 0,
-    }),
-    getCases: mockFunction<ApiClient['getCases']>().mockResolvedValue({ cases: [] }),
-    createCase: mockFunction<ApiClient['createCase']>().mockResolvedValue({
-      id: 'new-case-id',
-      name: 'New Case',
-    }),
-    updateCase: mockFunction<ApiClient['updateCase']>().mockResolvedValue({
-      id: 'case-id',
-      name: 'Updated Case',
-    }),
-    deleteCase: mockFunction<ApiClient['deleteCase']>().mockResolvedValue({ success: true }),
-    searchSymptoms: mockFunction<ApiClient['searchSymptoms']>().mockResolvedValue({
-      results: [],
-      total: 0,
-    }),
   } as unknown as jest.Mocked<ApiClient>;
 }
 

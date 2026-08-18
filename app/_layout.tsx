@@ -9,7 +9,6 @@ import 'react-native-reanimated';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 
 import { fonts, ThemeProvider, useTheme } from '@/constants/theme';
-import { AppProvider } from '@/context/AppContext';
 import { withHaptic } from '@/lib/haptics';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
@@ -65,9 +64,7 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <ThemeProvider>
-        <AppProvider>
-          <RootNavigator />
-        </AppProvider>
+        <RootNavigator />
       </ThemeProvider>
     </SafeAreaProvider>
   );
@@ -97,10 +94,6 @@ function RootNavigator() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen
-          name="select-book"
-          options={{ title: 'Select source', presentation: 'modal' }}
-        />
         <Stack.Screen
           name="auth/login"
           options={{ title: '', headerLeft: BackHomeHeaderButton }}
