@@ -62,6 +62,25 @@ export const aiMatchSymptomsSchema = z.object({
   selectedBooks: z.array(bookIdSchema).optional(),
 });
 
+// Grounded chat request, matching the RAG backend limits (4000-char turns, 20-turn history).
+export const chatTurnSchema = z.object({
+  role: z.enum(['user', 'assistant']),
+  content: z.string().trim().min(1).max(4000),
+});
+
+export const chatRequestSchema = z.object({
+  message: z.string().trim().min(1).max(4000),
+  history: z.array(chatTurnSchema).max(20).optional(),
+  bookIds: z
+    .array(bookIdSchema)
+    .min(1)
+    .max(4)
+    .refine((bookIds) => new Set(bookIds).size === bookIds.length, {
+      message: 'bookIds must not contain duplicates',
+    })
+    .optional(),
+});
+
 // Response validation schemas
 export const apiErrorSchema = z.object({
   code: z.enum(['AUTH_REQUIRED', 'INVALID_INPUT', 'INTERNAL_ERROR', 'NOT_FOUND']),
@@ -75,3 +94,4 @@ export type CaseResult = z.infer<typeof caseResultSchema>;
 export type CreateCaseRequest = z.infer<typeof createCaseSchema>;
 export type UpdateCaseRequest = z.infer<typeof updateCaseSchema>;
 export type AiMatchSymptomsRequest = z.infer<typeof aiMatchSymptomsSchema>;
+export type ChatApiRequest = z.infer<typeof chatRequestSchema>;

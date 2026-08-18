@@ -5,7 +5,9 @@ import {
   selectedSymptomSchema,
   caseResultSchema,
   aiMatchSymptomsSchema,
-  apiErrorSchema
+  apiErrorSchema,
+  chatTurnSchema,
+  chatRequestSchema
 } from '../schemas';
 
 describe('schemas', () => {
@@ -153,6 +155,49 @@ describe('schemas', () => {
     it('should reject invalid error codes', () => {
       const invalid = { code: 'BAD_REQUEST', message: 'error' };
       expect(apiErrorSchema.safeParse(invalid).success).toBe(false);
+    });
+  });
+
+  describe('chatTurnSchema', () => {
+    it('should validate a user or assistant turn', () => {
+      expect(chatTurnSchema.safeParse({ role: 'user', content: 'Tell me about Nux vomica.' }).success).toBe(true);
+      expect(chatTurnSchema.safeParse({ role: 'assistant', content: 'Nux vomica is chilly.' }).success).toBe(true);
+    });
+
+    it('should reject unknown roles', () => {
+      expect(chatTurnSchema.safeParse({ role: 'system', content: 'prompt' }).success).toBe(false);
+    });
+
+    it('should reject blank content and content over 4000 chars', () => {
+      expect(chatTurnSchema.safeParse({ role: 'user', content: '   ' }).success).toBe(false);
+      expect(chatTurnSchema.safeParse({ role: 'user', content: 'a'.repeat(4001) }).success).toBe(false);
+    });
+  });
+
+  describe('chatRequestSchema', () => {
+    it('should validate a minimal grounded chat request', () => {
+      expect(chatRequestSchema.safeParse({ message: 'How is Nux vomica described?' }).success).toBe(true);
+    });
+
+    it('should trim the message and reject blank ones', () => {
+      const parsed = chatRequestSchema.parse({ message: '  Hello  ' });
+      expect(parsed.message).toBe('Hello');
+      expect(chatRequestSchema.safeParse({ message: '   ' }).success).toBe(false);
+    });
+
+    it('should cap history at 20 turns', () => {
+      const turn = { role: 'user', content: 'question' };
+      expect(chatRequestSchema.safeParse({ message: 'hi', history: Array(20).fill(turn) }).success).toBe(true);
+      expect(chatRequestSchema.safeParse({ message: 'hi', history: Array(21).fill(turn) }).success).toBe(false);
+    });
+
+    it('should reject duplicate bookIds', () => {
+      expect(
+        chatRequestSchema.safeParse({
+          message: 'hi',
+          bookIds: ['clarke-MM', 'clarke-MM']
+        }).success
+      ).toBe(false);
     });
   });
 });
