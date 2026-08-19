@@ -1,5 +1,5 @@
 import { useHeaderHeight } from '@react-navigation/elements';
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 
@@ -13,6 +13,9 @@ import {
 import { useTheme } from '@/constants/theme';
 import { sendChatMessage } from '@/lib/api/chat-service';
 import { chatAnswerBody } from '@/lib/chat-answer';
+import { appendExchange, createChat, loadChat } from '@/lib/chat-history';
+import { useAuthStore } from '@/lib/stores/auth-store';
+import { useChatHistoryStore } from '@/lib/stores/chat-history-store';
 
 const HISTORY_TURN_LIMIT = 20;
 
@@ -25,12 +28,68 @@ function createMessageId(): string {
 export default function ChatScreen() {
   const { colors } = useTheme();
   const headerHeight = useHeaderHeight();
+  const user = useAuthStore((state) => state.user);
+  const { activeChatId, resumeNonce, setActiveChatId, clearActiveChat } =
+    useChatHistoryStore();
   const [messages, setMessages] = useState<ChatMessage[]>([]);
   const [draft, setDraft] = useState('');
   const [isSending, setIsSending] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [historyError, setHistoryError] = useState<string | null>(null);
 
   const hasMessages = messages.length > 0;
+
+  // Reacts to resume/clear requests issued from the history screen.
+  useEffect(() => {
+    if (resumeNonce === 0) return;
+
+    if (!activeChatId) {
+      setMessages([]);
+      setError(null);
+      setHistoryError(null);
+      setDraft('');
+      return;
+    }
+
+    let cancelled = false;
+    loadChat(activeChatId)
+      .then((chat) => {
+        if (cancelled) return;
+        if (!chat) {
+          setHistoryError('That chat no longer exists.');
+          return;
+        }
+        setMessages(chat.messages);
+        setError(null);
+        setHistoryError(null);
+        setDraft('');
+      })
+      .catch(() => {
+        if (!cancelled) {
+          setHistoryError('That chat could not be loaded. Please try again.');
+        }
+      });
+
+    return () => {
+      cancelled = true;
+    };
+  }, [resumeNonce, activeChatId]);
+
+  /** Saves a completed exchange, creating the chat when the thread is new. */
+  const persistExchange = async (exchange: ChatMessage[]) => {
+    if (!user) return;
+    try {
+      if (activeChatId) {
+        await appendExchange(activeChatId, exchange);
+      } else {
+        const created = await createChat(user.id, exchange);
+        setActiveChatId(created.id);
+      }
+    } catch (cause) {
+      console.warn('Failed to save chat exchange:', cause);
+      setHistoryError('Your chat could not be saved to your account.');
+    }
+  };
 
   const sendMessage = async () => {
     const text = draft.trim();
@@ -52,15 +111,14 @@ export default function ChatScreen() {
 
     try {
       const response = await sendChatMessage({ message: text, history });
-      setMessages((current) => [
-        ...current,
-        {
-          id: createMessageId(),
-          role: 'assistant',
-          content: chatAnswerBody(response.answer),
-          sources: response.sources,
-        },
-      ]);
+      const assistantMessage: ChatMessage = {
+        id: createMessageId(),
+        role: 'assistant',
+        content: chatAnswerBody(response.answer),
+        sources: response.sources,
+      };
+      setMessages((current) => [...current, assistantMessage]);
+      await persistExchange([userMessage, assistantMessage]);
     } catch (cause) {
       setMessages((current) =>
         current.filter((message) => message.id !== userMessage.id),
@@ -77,8 +135,10 @@ export default function ChatScreen() {
   };
 
   const startNewChat = () => {
+    clearActiveChat();
     setMessages([]);
     setError(null);
+    setHistoryError(null);
     setDraft('');
   };
 
@@ -103,6 +163,7 @@ export default function ChatScreen() {
         )}
 
         {error ? <ChatError error={error} /> : null}
+        {historyError ? <ChatError error={historyError} /> : null}
 
         <ChatComposer
           draft={draft}

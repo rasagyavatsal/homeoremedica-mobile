@@ -97,6 +97,7 @@ function RootNavigator() {
         }}
       >
         <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+        <Stack.Screen name="chat-history" options={{ title: 'Chat history' }} />
         <Stack.Screen
           name="select-book"
           options={{ title: 'Select source', presentation: 'modal' }}

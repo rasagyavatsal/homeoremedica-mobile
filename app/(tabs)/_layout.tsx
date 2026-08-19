@@ -1,12 +1,12 @@
 import React from 'react';
-import { Tabs } from 'expo-router';
+import { Tabs, useRouter } from 'expo-router';
 import { Ionicons } from '@expo/vector-icons';
 import { TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandLockup } from '@/components/BrandLockup';
 import { ThemeToggle } from '@/components/ThemeToggle';
-import { fonts, useTheme, withAlpha } from '@/constants/theme';
+import { fonts, sizes, space, useTheme, withAlpha } from '@/constants/theme';
 import { withHaptic } from '@/lib/haptics';
 
 type TabIconProps = Readonly<{ color: string; focused: boolean }>;
@@ -35,6 +35,29 @@ function CasesTabIcon({ color, focused }: TabIconProps) {
 
 function ProfileTabIcon({ color, focused }: TabIconProps) {
   return <Ionicons name={focused ? 'person' : 'person-outline'} size={22} color={color} />;
+}
+
+function ChatHistoryHeaderButton() {
+  const router = useRouter();
+  const { colors } = useTheme();
+
+  return (
+    <TouchableOpacity
+      onPress={withHaptic(() => router.push('/chat-history'))}
+      accessibilityRole="button"
+      accessibilityLabel="Chat history"
+      testID="chat-history-button"
+      style={{
+        width: sizes.iconButton,
+        height: sizes.iconButton,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginLeft: space.page,
+      }}
+    >
+      <Ionicons name="time-outline" size={22} color={colors.onSurfaceVariant} />
+    </TouchableOpacity>
+  );
 }
 
 export default function TabLayout() {
@@ -93,6 +116,7 @@ export default function TabLayout() {
           tabBarLabel: 'Chat',
           tabBarIcon: ChatTabIcon,
           tabBarButtonTestID: 'tab-chat',
+          headerLeft: () => <ChatHistoryHeaderButton />,
         }}
       />
       <Tabs.Screen
