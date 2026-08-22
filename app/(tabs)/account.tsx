@@ -7,12 +7,12 @@ import Constants from 'expo-constants';
 import { ThemeToggle } from '@/components/ThemeToggle';
 import { Surface } from '@/components/ui/Surface';
 import { Body, Display, Eyebrow, Mono } from '@/components/ui/Type';
-import { fonts, radius, space, useTheme, withAlpha } from '@/constants/theme';
+import { radius, sizes, space, type, useTheme, withAlpha } from '@/constants/theme';
 import { useAuthStore } from '@/lib/stores/auth-store';
 import { isGoogleUser } from '@/lib/auth/firebase-auth';
 import { withHaptic } from '@/lib/haptics';
 
-export default function ProfileScreen() {
+export default function AccountScreen() {
   const { colors, resolvedTheme } = useTheme();
   const { user, logout } = useAuthStore();
   const router = useRouter();
@@ -47,8 +47,8 @@ export default function ProfileScreen() {
       <Surface style={{ alignItems: 'center', padding: space.xxl, marginBottom: space.xxl }}>
         <View
           style={{
-            width: 64,
-            height: 64,
+            width: sizes.avatarLg,
+            height: sizes.avatarLg,
             borderRadius: radius.pill,
             backgroundColor: colors.accent,
             alignItems: 'center',
@@ -58,10 +58,9 @@ export default function ProfileScreen() {
         >
           <Body
             style={{
-              width: 64,
-              fontFamily: fonts.display,
-              fontSize: 24,
-              lineHeight: 64,
+              fontFamily: type.displaySm.fontFamily,
+              fontSize: type.displaySm.fontSize,
+              lineHeight: sizes.avatarLg,
               fontWeight: '500',
               textAlign: 'center',
               includeFontPadding: false,
@@ -72,7 +71,7 @@ export default function ProfileScreen() {
           </Body>
         </View>
         <Display size="sm">{user.name || 'Account'}</Display>
-        <Body size="sm" tone="onSurfaceVariant" style={{ marginTop: 4 }}>
+        <Body size="sm" tone="onSurfaceVariant" style={{ marginTop: space.xs }}>
           {user.email}
         </Body>
       </Surface>
@@ -93,8 +92,8 @@ export default function ProfileScreen() {
         >
           <View
             style={{
-              width: 40,
-              height: 40,
+              width: sizes.avatarMd,
+              height: sizes.avatarMd,
               alignItems: 'center',
               justifyContent: 'center',
               borderRadius: radius.pill,
@@ -160,7 +159,7 @@ export default function ProfileScreen() {
         </Pressable>
       </Surface>
 
-      <Mono small style={{ textAlign: 'center', marginBottom: 32 }}>
+      <Mono small style={{ textAlign: 'center', marginBottom: space.xxxl }}>
         Version {Constants.expoConfig?.version || '1.0.0'}
       </Mono>
     </ScrollView>

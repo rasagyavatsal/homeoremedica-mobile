@@ -1,14 +1,14 @@
 import React from 'react';
 import { Image, Text, View } from 'react-native';
 
-import { fonts, useTheme } from '@/constants/theme';
+import { sizes, space, type, useTheme } from '@/constants/theme';
 
 export function BrandLockup({ compact = false }: Readonly<{ compact?: boolean }>) {
   const { colors, isDark } = useTheme();
 
   return (
-    <View style={{ flexDirection: 'row', alignItems: 'center', gap: 8 }}>
-      <View style={{ width: 40, height: 40, overflow: 'hidden' }}>
+    <View style={{ flexDirection: 'row', alignItems: 'center', gap: space.sm }}>
+      <View style={{ width: sizes.logo, height: sizes.logo, overflow: 'hidden' }}>
         <Image
           source={
             isDark
@@ -16,7 +16,12 @@ export function BrandLockup({ compact = false }: Readonly<{ compact?: boolean }>
               : require('../assets/images/logo-light-transparent.png')
           }
           resizeMode="contain"
-          style={{ width: 48, height: 48, marginLeft: -4, marginTop: -4 }}
+          style={{
+            width: sizes.logo * 1.2,
+            height: sizes.logo * 1.2,
+            marginLeft: -space.xs,
+            marginTop: -space.xs,
+          }}
           accessibilityElementsHidden
           importantForAccessibility="no"
         />
@@ -24,14 +29,7 @@ export function BrandLockup({ compact = false }: Readonly<{ compact?: boolean }>
       {compact ? null : (
         <Text
           numberOfLines={1}
-          style={{
-            fontFamily: fonts.display,
-            fontSize: 20,
-            lineHeight: 24,
-            fontWeight: '500',
-            letterSpacing: -0.6,
-            color: colors.foreground,
-          }}
+          style={[{ ...type.title }, { color: colors.foreground }]}
         >
           HomeoRemedica
         </Text>

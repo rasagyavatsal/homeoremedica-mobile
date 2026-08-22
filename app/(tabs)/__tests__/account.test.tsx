@@ -2,7 +2,7 @@ import React from 'react';
 import { StyleSheet } from 'react-native';
 import { render } from '@testing-library/react-native';
 
-import ProfileScreen from '../profile';
+import AccountScreen from '../account';
 import { useAuthStore } from '@/lib/stores/auth-store';
 
 const mockPush = jest.fn();
@@ -35,7 +35,7 @@ jest.mock('expo-constants', () => ({
   expoConfig: { version: '1.0.0' },
 }));
 
-describe('ProfileScreen', () => {
+describe('AccountScreen', () => {
   const mockUseAuthStore = useAuthStore as unknown as jest.Mock;
 
   beforeEach(() => {
@@ -49,8 +49,8 @@ describe('ProfileScreen', () => {
     });
   });
 
-  it('centers the profile initial with stable text metrics', () => {
-    const { getByText } = render(<ProfileScreen />);
+  it('centers the account initial with stable text metrics', () => {
+    const { getByText } = render(<AccountScreen />);
     const initialStyle = StyleSheet.flatten(getByText('R').props.style);
 
     expect(initialStyle).toEqual(
@@ -62,10 +62,21 @@ describe('ProfileScreen', () => {
     );
   });
 
+  it('shows the account identity and preferences', () => {
+    const { getByText } = render(<AccountScreen />);
+
+    expect(getByText('Rasagya')).toBeTruthy();
+    expect(getByText('rasagya@example.com')).toBeTruthy();
+    expect(getByText('Appearance')).toBeTruthy();
+    expect(getByText('Change password')).toBeTruthy();
+    expect(getByText('Log out')).toBeTruthy();
+    expect(getByText('Version 1.0.0')).toBeTruthy();
+  });
+
   it('opens sign in for an unauthenticated tab', () => {
     mockUseAuthStore.mockReturnValue({ user: null, logout: jest.fn() });
 
-    render(<ProfileScreen />);
+    render(<AccountScreen />);
 
     expect(mockPush).toHaveBeenCalledWith('/auth/login');
     expect(mockReplace).not.toHaveBeenCalled();

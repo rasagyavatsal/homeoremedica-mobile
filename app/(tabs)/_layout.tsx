@@ -5,8 +5,7 @@ import { TouchableOpacity } from 'react-native';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 import { BrandLockup } from '@/components/BrandLockup';
-import { ThemeToggle } from '@/components/ThemeToggle';
-import { fonts, useTheme, withAlpha } from '@/constants/theme';
+import { fonts, sizes, space, useTheme, withAlpha } from '@/constants/theme';
 import { withHaptic } from '@/lib/haptics';
 
 type TabIconProps = Readonly<{ color: string; focused: boolean }>;
@@ -25,7 +24,11 @@ function ChatTabIcon({ color, focused }: TabIconProps) {
   return <Ionicons name={focused ? 'chatbubbles' : 'chatbubbles-outline'} size={22} color={color} />;
 }
 
-function ProfileTabIcon({ color, focused }: TabIconProps) {
+function HistoryTabIcon({ color, focused }: TabIconProps) {
+  return <Ionicons name={focused ? 'time' : 'time-outline'} size={22} color={color} />;
+}
+
+function AccountTabIcon({ color, focused }: TabIconProps) {
   return <Ionicons name={focused ? 'person' : 'person-outline'} size={22} color={color} />;
 }
 
@@ -37,17 +40,10 @@ export default function TabLayout() {
     <Tabs
       screenOptions={{
         headerShown: true,
+        headerTitle: () => <BrandLockup />,
         headerTitleAlign: 'left',
         headerStyle: { backgroundColor: colors.background },
         headerTintColor: colors.foreground,
-        headerTitleStyle: {
-          fontFamily: fonts.display,
-          fontSize: 20,
-          fontWeight: '500',
-          color: colors.foreground,
-        },
-        headerRight: () => <ThemeToggle />,
-        headerRightContainerStyle: { paddingRight: 16 },
         headerShadowVisible: false,
         tabBarActiveTintColor: colors.primary,
         tabBarInactiveTintColor: colors.onSurfaceVariant,
@@ -55,9 +51,9 @@ export default function TabLayout() {
           backgroundColor: colors.card,
           borderTopColor: withAlpha(colors.border, 0.42),
           borderTopWidth: 1,
-          height: 64 + insets.bottom,
-          paddingBottom: insets.bottom + 8,
-          paddingTop: 8,
+          height: sizes.tabBar + insets.bottom,
+          paddingBottom: insets.bottom + space.sm,
+          paddingTop: space.sm,
           elevation: 8,
         },
         tabBarLabelStyle: {
@@ -79,12 +75,21 @@ export default function TabLayout() {
         }}
       />
       <Tabs.Screen
-        name="profile"
+        name="history"
+        options={{
+          title: 'History',
+          tabBarLabel: 'History',
+          tabBarIcon: HistoryTabIcon,
+          tabBarButtonTestID: 'tab-history',
+        }}
+      />
+      <Tabs.Screen
+        name="account"
         options={{
           title: 'Account',
-          tabBarLabel: 'Profile',
-          tabBarIcon: ProfileTabIcon,
-          tabBarButtonTestID: 'tab-profile',
+          tabBarLabel: 'Account',
+          tabBarIcon: AccountTabIcon,
+          tabBarButtonTestID: 'tab-account',
         }}
       />
     </Tabs>

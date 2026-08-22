@@ -38,6 +38,11 @@ export function Eyebrow({ tone = 'onSurfaceVariant', style, ...props }: TextVari
   return <Text style={[t.eyebrow, { color }, style]} {...props} />;
 }
 
+export function Title({ tone = 'foreground', style, ...props }: TextVariantProps) {
+  const color = useTone(tone);
+  return <Text style={[t.title, { color }, style]} {...props} />;
+}
+
 export function Mono({
   tone = 'onSurfaceVariant',
   small,
@@ -53,8 +58,9 @@ export function Body({
   size = 'md',
   style,
   ...props
-}: TextVariantProps & { size?: 'sm' | 'md' | 'lg' }) {
+}: TextVariantProps & { size?: 'xs' | 'sm' | 'md' | 'lg' }) {
   const color = useTone(tone);
-  const variant = size === 'lg' ? t.bodyLg : size === 'sm' ? t.bodySm : t.body;
+  const variant =
+    size === 'lg' ? t.bodyLg : size === 'sm' ? t.bodySm : size === 'xs' ? t.bodyXs : t.body;
   return <Text style={[variant, { color }, style]} {...props} />;
 }

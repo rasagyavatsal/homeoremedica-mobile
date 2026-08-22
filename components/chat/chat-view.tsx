@@ -14,6 +14,7 @@ import { Body, Display, Eyebrow, Mono } from '@/components/ui/Type';
 import { getSourceBookName } from '@/constants/books';
 import {
   fonts,
+  layout,
   radius,
   sizes,
   space,
@@ -21,7 +22,6 @@ import {
   useTheme,
   withAlpha,
 } from '@/constants/theme';
-import { CHAT_SAFETY_NOTICE } from '@/lib/chat-answer';
 import { formatRemedyDisplayName } from '@/lib/format';
 import { withHaptic } from '@/lib/haptics';
 import type { ChatSource } from '@/types/chat';
@@ -38,8 +38,8 @@ export interface ChatMessage {
  * padding, so the draft grows with the text but never crowds the thread.
  */
 const COMPOSER_INPUT_MAX_HEIGHT = type.body.lineHeight * 4 + space.xl * 2;
-const USER_BUBBLE_MAX_WIDTH = '88%';
 const MESSAGE_MAX_LENGTH = 4000;
+const MESSAGE_COLLAPSE_LENGTH = 320;
 
 export function ChatEmptyState() {
   return (
@@ -55,11 +55,10 @@ export function ChatEmptyState() {
         Ask the materia medica
       </Display>
       <Body
-        size="lg"
         tone="onSurfaceVariant"
         style={{ marginTop: space.xl, textAlign: 'center' }}
       >
-        Answers cite passages from Clarke, Boericke, Kent, and Allen.
+        Answers draw only from Clarke, Boericke, Kent, and Allen.
       </Body>
     </View>
   );
@@ -140,29 +139,122 @@ function ChatSources({ sources }: Readonly<{ sources: ChatSource[] }>) {
   );
 }
 
+/**
+ * Cuts a long message at a word boundary for the collapsed preview, or
+ * returns null when the message is short enough to render in full. Kept in
+ * sync with apps/web/components/chat-view.tsx.
+ */
+function truncateMessage(content: string) {
+  if (content.length <= MESSAGE_COLLAPSE_LENGTH) return null;
+
+  const boundary = content.lastIndexOf(' ', MESSAGE_COLLAPSE_LENGTH);
+  const end = boundary > MESSAGE_COLLAPSE_LENGTH / 2 ? boundary : MESSAGE_COLLAPSE_LENGTH;
+  return `${content.slice(0, end)}…`;
+}
+
+function UserMessageView({ content }: Readonly<{ content: string }>) {
+  const { colors } = useTheme();
+  const [expanded, setExpanded] = useState(false);
+  const collapsedText = truncateMessage(content);
+  const isCollapsible = collapsedText !== null;
+
+  return (
+    <View style={{ alignItems: 'flex-end' }}>
+      <Surface
+        radius="lg"
+        style={{
+          maxWidth: layout.chatBubble,
+          paddingHorizontal: space.lg,
+          paddingVertical: space.md,
+        }}
+      >
+        <Body size="sm">{isCollapsible && !expanded ? collapsedText : content}</Body>
+        {isCollapsible ? (
+          <Pressable
+            onPress={withHaptic(() => setExpanded((current) => !current))}
+            accessibilityRole="button"
+            accessibilityState={{ expanded }}
+            hitSlop={8}
+            style={{
+              alignSelf: 'flex-start',
+              flexDirection: 'row',
+              alignItems: 'center',
+              gap: space.xs,
+              marginTop: space.sm,
+            }}
+          >
+            <Body size="xs" tone="primary" style={{ fontWeight: '500' }}>
+              {expanded ? 'Show less' : 'Show more'}
+            </Body>
+            <Ionicons
+              name={expanded ? 'chevron-up' : 'chevron-down'}
+              size={14}
+              color={colors.primary}
+            />
+          </Pressable>
+        ) : null}
+      </Surface>
+    </View>
+  );
+}
+
+type EmphasisRun = { type: 'text' | 'strong'; value: string };
+
+const EMPHASIS_PATTERN = /(\*\*[^*]+\*\*)|\*([^*\n]+)\*/g;
+
+/**
+ * Splits an answer paragraph into text and strong runs. Balanced **bold**
+ * and *starred* runs become strong; any orphan asterisks left in plain text
+ * are dropped so a stray star never renders. Kept in sync with
+ * apps/web/components/chat-view.tsx.
+ */
+function parseEmphasisRuns(text: string): EmphasisRun[] {
+  const runs: EmphasisRun[] = [];
+  let cursor = 0;
+
+  for (const match of text.matchAll(EMPHASIS_PATTERN)) {
+    const index = match.index ?? 0;
+    if (index > cursor) runs.push({ type: 'text', value: text.slice(cursor, index) });
+    const value = match[1] !== undefined ? match[1].slice(2, -2) : (match[2] ?? '');
+    runs.push({ type: 'strong', value });
+    cursor = index + match[0].length;
+  }
+  if (cursor < text.length) runs.push({ type: 'text', value: text.slice(cursor) });
+
+  return runs
+    .map((run) => (run.type === 'text' ? { ...run, value: run.value.replace(/\*/g, '') } : run))
+    .filter((run) => run.value !== '');
+}
+
+/** Renders starred and double-starred spans in assistant answers as bold text. */
+function BoldText({ text }: Readonly<{ text: string }>) {
+  return (
+    <>
+      {parseEmphasisRuns(text).map((run, index) =>
+        run.type === 'strong' ? (
+          <Body key={index} style={{ fontWeight: '600' }}>
+            {run.value}
+          </Body>
+        ) : (
+          <React.Fragment key={index}>{run.value}</React.Fragment>
+        ),
+      )}
+    </>
+  );
+}
+
 function ChatMessageView({ message }: Readonly<{ message: ChatMessage }>) {
   if (message.role === 'user') {
-    return (
-      <View style={{ alignItems: 'flex-end' }}>
-        <Surface
-          radius="lg"
-          style={{
-            maxWidth: USER_BUBBLE_MAX_WIDTH,
-            paddingHorizontal: space.lg,
-            paddingVertical: space.md,
-          }}
-        >
-          <Body size="sm">{message.content}</Body>
-        </Surface>
-      </View>
-    );
+    return <UserMessageView content={message.content} />;
   }
 
   return (
     <View style={{ gap: space.lg }}>
       <View style={{ gap: space.md }}>
         {message.content.split(/\n{2,}/).map((paragraph, index) => (
-          <Body key={index}>{paragraph}</Body>
+          <Body key={index}>
+            <BoldText text={paragraph} />
+          </Body>
         ))}
       </View>
       {message.sources && message.sources.length > 0 ? (
@@ -192,8 +284,8 @@ export function ChatThread({
         keyboardShouldPersistTaps="handled"
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{
-          paddingHorizontal: space.page,
-          paddingBottom: space.xl,
+          paddingHorizontal: space.xxl,
+          paddingVertical: space.sm,
           gap: space.xxl,
         }}
         onContentSizeChange={() => listRef.current?.scrollToEnd({ animated: true })}
@@ -205,13 +297,13 @@ export function ChatThread({
             flexDirection: 'row',
             alignItems: 'center',
             gap: space.md,
-            paddingHorizontal: space.page,
+            paddingHorizontal: space.xxl,
             paddingBottom: space.sm,
           }}
         >
           <ActivityIndicator size="small" color={colors.primary} />
           <Body size="sm" tone="onSurfaceVariant">
-            Waiting for the answer…
+            Waiting for the answer
           </Body>
         </View>
       ) : null}
@@ -221,7 +313,7 @@ export function ChatThread({
 
 export function ChatError({ error }: Readonly<{ error: string }>) {
   return (
-    <View style={{ paddingHorizontal: space.page, paddingBottom: space.xs }}>
+    <View style={{ paddingHorizontal: space.xxl, paddingBottom: space.xs }}>
       <Callout variant="destructive">{error}</Callout>
     </View>
   );
@@ -243,9 +335,10 @@ export function ChatComposer({
   const canSend = draft.trim().length > 0 && !isSending;
 
   return (
-    <View style={{ paddingHorizontal: space.page, paddingTop: space.sm }}>
+    <View style={{ paddingHorizontal: space.xxl, paddingTop: space.sm, paddingBottom: space.md }}>
       <Surface
         radius="lg"
+        tone="surface"
         style={{
           borderColor: focused
             ? colors.primary
@@ -312,17 +405,6 @@ export function ChatComposer({
           </Pressable>
         </View>
       </Surface>
-      <Body
-        size="sm"
-        tone="onSurfaceVariant"
-        style={{
-          textAlign: 'center',
-          marginTop: space.sm,
-          marginBottom: space.sm,
-        }}
-      >
-        {CHAT_SAFETY_NOTICE}
-      </Body>
     </View>
   );
 }
