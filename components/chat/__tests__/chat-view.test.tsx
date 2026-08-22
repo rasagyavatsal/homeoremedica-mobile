@@ -106,8 +106,7 @@ describe('ChatComposer', () => {
 });
 
 describe('ChatThread', () => {
-  it('renders user and assistant messages and starts a new chat', () => {
-    const onNewChat = jest.fn();
+  it('renders user and assistant messages', () => {
     const { getByText } = render(
       <ChatThread
         messages={[
@@ -115,15 +114,11 @@ describe('ChatThread', () => {
           ASSISTANT_MESSAGE,
         ]}
         isSending={false}
-        onNewChat={onNewChat}
       />
     );
 
     expect(getByText('How is Nux vomica described?')).toBeTruthy();
     expect(getByText('Nux vomica is irritable and chilly [1].')).toBeTruthy();
-    expect(getByText('New chat')).toBeTruthy();
-    fireEvent.press(getByText('New chat'));
-    expect(onNewChat).toHaveBeenCalled();
   });
 
   it('reveals cited passages when the sources toggle opens', () => {
@@ -131,7 +126,6 @@ describe('ChatThread', () => {
       <ChatThread
         messages={[ASSISTANT_MESSAGE]}
         isSending={false}
-        onNewChat={jest.fn()}
       />
     );
 
@@ -150,7 +144,6 @@ describe('ChatThread', () => {
       <ChatThread
         messages={[{ id: 'u1', role: 'user', content: 'Hello?' }]}
         isSending
-        onNewChat={jest.fn()}
       />
     );
 
