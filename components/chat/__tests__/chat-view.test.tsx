@@ -8,7 +8,6 @@ import {
   ChatThread,
   type ChatMessage,
 } from '../chat-view';
-import { CHAT_SAFETY_NOTICE } from '@/lib/chat-answer';
 
 jest.mock('@/lib/haptics', () => ({
   withHaptic: (handler: () => void) => handler,
@@ -41,14 +40,14 @@ describe('ChatEmptyState', () => {
     const { getByText } = render(<ChatEmptyState />);
     expect(getByText('Ask the materia medica')).toBeTruthy();
     expect(
-      getByText('Answers cite passages from Clarke, Boericke, Kent, and Allen.')
+      getByText('Answers draw only from Clarke, Boericke, Kent, and Allen.')
     ).toBeTruthy();
   });
 });
 
 describe('ChatComposer', () => {
-  it('shows the persistent safety notice under the composer', () => {
-    const { getAllByText, getByPlaceholderText } = render(
+  it('renders the input with the web placeholder', () => {
+    const { getByPlaceholderText } = render(
       <ChatComposer
         draft=""
         isSending={false}
@@ -58,7 +57,6 @@ describe('ChatComposer', () => {
     );
 
     expect(getByPlaceholderText('Ask about a remedy or symptom…')).toBeTruthy();
-    expect(getAllByText(CHAT_SAFETY_NOTICE)).toHaveLength(1);
   });
 
   it('disables send while the draft is empty and enables it with text', () => {
@@ -121,6 +119,47 @@ describe('ChatThread', () => {
     expect(getByText('Nux vomica is irritable and chilly [1].')).toBeTruthy();
   });
 
+  it('renders starred answer runs as bold text', () => {
+    const { getByText } = render(
+      <ChatThread
+        messages={[
+          {
+            id: 'a1',
+            role: 'assistant',
+            content: 'Keep **calm** and stay *steady*.',
+          },
+        ]}
+        isSending={false}
+      />
+    );
+
+    expect(getByText('Keep calm and stay steady.')).toBeTruthy();
+    expect(getByText('calm').props.style).toEqual(
+      expect.arrayContaining([expect.objectContaining({ fontWeight: '600' })])
+    );
+    expect(getByText('steady').props.style).toEqual(
+      expect.arrayContaining([expect.objectContaining({ fontWeight: '600' })])
+    );
+  });
+
+  it('collapses a long user message until Show more is pressed', () => {
+    const content = `${'word '.repeat(80).trim()} tail`;
+    const { getByText, queryByText } = render(
+      <ChatThread
+        messages={[{ id: 'u1', role: 'user', content }]}
+        isSending={false}
+      />
+    );
+
+    expect(queryByText(content)).toBeNull();
+    expect(getByText('Show more')).toBeTruthy();
+
+    fireEvent.press(getByText('Show more'));
+
+    expect(getByText(content)).toBeTruthy();
+    expect(getByText('Show less')).toBeTruthy();
+  });
+
   it('reveals cited passages when the sources toggle opens', () => {
     const { getByText, queryByText } = render(
       <ChatThread
@@ -147,7 +186,7 @@ describe('ChatThread', () => {
       />
     );
 
-    expect(getByText('Waiting for the answer…')).toBeTruthy();
+    expect(getByText('Waiting for the answer')).toBeTruthy();
   });
 });
 

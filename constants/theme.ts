@@ -151,6 +151,19 @@ export const space = {
 export const sizes = {
   touch: 44,
   iconButton: 40,
+  logo: 40,
+  avatarSm: 32,
+  avatarMd: 40,
+  avatarLg: 64,
+  tabBar: 64,
+} as const;
+
+/**
+ * Layout tokens. `chatBubble` caps a user message the way the web app's
+ * `--layout-chat-bubble` token does (75% of the thread width).
+ */
+export const layout = {
+  chatBubble: '75%',
 } as const;
 
 const systemSans = Platform.select({
@@ -227,6 +240,11 @@ export const type = {
     fontFamily: fonts.body,
     fontSize: 14,
     lineHeight: 22,
+  },
+  bodyXs: {
+    fontFamily: fonts.body,
+    fontSize: 12,
+    lineHeight: 18,
   },
 } satisfies Record<string, TextStyle>;
 
