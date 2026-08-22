@@ -8,7 +8,6 @@ import {
   View,
 } from 'react-native';
 
-import { Button } from '@/components/ui/Button';
 import { Callout } from '@/components/ui/Callout';
 import { Surface } from '@/components/ui/Surface';
 import { Body, Display, Eyebrow, Mono } from '@/components/ui/Type';
@@ -176,35 +175,15 @@ function ChatMessageView({ message }: Readonly<{ message: ChatMessage }>) {
 export function ChatThread({
   messages,
   isSending,
-  onNewChat,
 }: Readonly<{
   messages: ChatMessage[];
   isSending: boolean;
-  onNewChat: () => void;
 }>) {
   const { colors } = useTheme();
   const listRef = useRef<FlatList<ChatMessage>>(null);
 
   return (
     <View style={{ flex: 1 }}>
-      <View
-        style={{
-          alignItems: 'flex-end',
-          paddingHorizontal: space.page,
-          paddingTop: space.md,
-          paddingBottom: space.sm,
-        }}
-      >
-        <Button
-          title="New chat"
-          variant="ghost"
-          onPress={onNewChat}
-          icon={
-            <Ionicons name="refresh" size={16} color={colors.onSurfaceVariant} />
-          }
-        />
-      </View>
-
       <FlatList
         ref={listRef}
         data={messages}
